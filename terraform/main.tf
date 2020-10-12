@@ -1,39 +1,26 @@
-terraform {
-  required_providers {
-    hcloud = {
-      source = "hetznercloud/hcloud"
-      version = "1.22.0"
-    }
-  }
-}
-
-# Set the variable value in *.tfvars file
-# or using the -var="hcloud_token=..." CLI option
-variable "hcloud_token" {}
-variable "hcloud_floating_ip" {}
-variable "hcloud_ssh_keys" {}
-
-# Configure the Hetzner Cloud Provider
-provider "hcloud" {
-  token = var.hcloud_token
-}
-
 # Create a server
 resource "hcloud_server" "wordpress-vps" {
   name = "wordpress-vps"
   image = "debian-10"
-  location = "nbg1"
-  server_type = "cx21"
+  location = var.hcloud_location
+  server_type = var.hcloud_server_type
   keep_disk = true
   ssh_keys =  var.hcloud_ssh_keys
+
+  # Software deployments
+  provisioner "local-exec" {
+	  command = <<EOT
+      sleep 30;
+	    >wordpress-instances.ini;
+	    echo "[wordpress]" | tee -a wordpress-instances.ini;
+	    echo "${hcloud_server.wordpress-vps.ipv4_address} ansible_user=root ansible_ssh_private_key_file=${var.private_key}" | tee -a wordpress-instances.ini;
+      export ANSIBLE_HOST_KEY_CHECKING=False;
+	    ansible-playbook -u root --private-key ${var.private_key} -i wordpress-instances.ini ../ansible/playbook-docker.yaml
+      EOT
+  }
 }
 
 resource "hcloud_floating_ip_assignment" "wordpress-ip" {
   floating_ip_id = var.hcloud_floating_ip
-  server_id = "${hcloud_server.wordpress-vps.id}"
+  server_id = hcloud_server.wordpress-vps.id
 }
-
-output "temp_ip" {
-  value = "${hcloud_server.wordpress-vps.ipv4_address}"
-}
-
