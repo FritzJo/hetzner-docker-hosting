@@ -1,0 +1,55 @@
+- hosts: all 
+  vars_files:
+  - ../ansible-config.yml
+  tasks:
+  - name: Creating folder structure - instances
+    become: yes
+    file:
+      path: /hosting/instances
+      state: directory
+      mode: 0775
+      recurse: yes
+  - name: Creating folder structure - scripts
+    become: yes
+    file:
+      path: /hosting/scripts
+      state: directory
+      mode: 0775
+      recurse: yes
+  - name: Creating folder structure - secrets
+    become: yes
+    file:
+      path: /hosting/secrets
+      state: directory
+      mode: 0775
+      recurse: yes
+  - name: Copy scripts - update.sh
+    copy:
+      src: ../scripts/update.sh
+      dest: /hosting/scripts/update.sh
+      mode: 0775
+  - name: Copy scripts - backup.sh
+    template:
+      src: ../scripts/backup.sh
+      dest: /hosting/scripts/backup.sh
+      mode: 0775
+  - name: Install backup software
+    apt:
+      name: "restic"
+      state: latest
+    become: yes
+  - name: Copy backup credentials
+    copy:
+      src: ../secrets/gcp-secret.json
+      dest: /hosting/secrets/gcp-secret.json
+      mode: 0775
+  - name: Create initial docker network
+    become: yes
+    command: docker network create proxy
+  - name: Copy instance files
+    copy:
+      src: ../instances/
+      dest: /hosting/instances/
+  - name: Initializing containers
+    become: yes
+    command: chdir=/hosting/scripts ./update.sh

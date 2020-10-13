@@ -16,6 +16,7 @@ resource "hcloud_server" "wordpress-vps" {
 	    echo "${hcloud_server.wordpress-vps.ipv4_address} ansible_user=root ansible_ssh_private_key_file=${var.private_key}" | tee -a wordpress-instances.ini;
       export ANSIBLE_HOST_KEY_CHECKING=False;
 	    ansible-playbook -u root --private-key ${var.private_key} -i wordpress-instances.ini ../ansible/playbook-docker.yaml
+      ansible-playbook -u root --private-key ${var.private_key} -i wordpress-instances.ini ../ansible/playbook-hosting.yaml
       EOT
   }
 }
