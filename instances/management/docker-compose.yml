@@ -9,3 +9,10 @@ services:
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./data:/data
+  files:
+    image: filebrowser/filebrowser
+    container_name: filebrowser
+    ports:
+      - "9001:80"
+    volumes:
+      - "/hosting/:/srv" 
