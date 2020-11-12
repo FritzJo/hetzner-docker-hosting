@@ -43,9 +43,12 @@
       src: ../secrets/gcp-secret.json
       dest: /hosting/secrets/gcp-secret.json
       mode: 0775
-  - name: Create initial docker network
+  - name: Create proxy docker network
     become: yes
     command: docker network create proxy
+  - name: Create dbadmin docker network
+    become: yes
+    command: docker network create dbadmin
   - name: Copy instance files
     copy:
       src: ../instances/
