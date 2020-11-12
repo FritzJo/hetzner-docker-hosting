@@ -4,9 +4,13 @@ SSH_KEY_FILE=./key
 echo -n "Initiate a backup first? (y/n)? "
 read answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
-    echo "TODO"
+    bash /hosting/scripts/backup.sh
 fi
 
-export ANSIBLE_HOST_KEY_CHECKING=False
-ansible-playbook -u root --private-key $SSH_KEY_FILE -i terraform/wordpress-instances.ini ansible/playbook-hosting.yaml
-
+if ! command -v ansible-playbook &> /dev/null; then
+    echo "Ansible could not be found, running in local mode!"
+    bash /hosting/scripts/update.sh
+else
+    export ANSIBLE_HOST_KEY_CHECKING=False
+    ansible-playbook -u root --private-key $SSH_KEY_FILE -i terraform/wordpress-instances.ini ansible/playbook-hosting.yaml
+fi
