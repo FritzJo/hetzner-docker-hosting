@@ -2,7 +2,7 @@
 SSH_KEY_FILE=./key
 
 echo -n "Initiate a backup first? (y/n)? "
-read answer
+read -r answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
     bash /hosting/scripts/backup.sh
 fi
