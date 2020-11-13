@@ -33,6 +33,11 @@
       src: ../scripts/backup.sh
       dest: /hosting/scripts/backup.sh
       mode: 0775
+  - name: Copy scripts - update-vps.sh
+    template:
+      src: ../update-vps.sh
+      dest: /hosting/update-vps.sh
+      mode: 0775
   - name: Install backup software
     apt:
       name: "restic"
@@ -46,9 +51,11 @@
   - name: Create proxy docker network
     become: yes
     command: docker network create proxy
+    ignore_errors: yes
   - name: Create dbadmin docker network
     become: yes
     command: docker network create dbadmin
+    ignore_errors: yes
   - name: Copy instance files
     copy:
       src: ../instances/
@@ -56,3 +63,15 @@
   - name: Initializing containers
     become: yes
     command: chdir=/hosting/scripts ./update.sh
+  - name: Enable auto-updates and configuration changes on reboot
+    cron:
+      name: "Update containers at reboot"
+      special_time: reboot
+      job: "/hosting/scripts/update.sh"
+  - name: Enable auto-reboot every week
+    cron:
+      name: "Reboot every week (Sun. 3:30 AM)"
+      weekday: "0"
+      minute: "30"
+      hour: "3"
+      job: "/sbin/shutdown -r now"
