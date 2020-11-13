@@ -3,22 +3,22 @@ version: '2'
 services:
   portainer:
     image: portainer/portainer
-    container_name: portainer
+    container_name: 00_Management_Portainer
     ports:
       - "9000:9000"
     volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-      - ./data:/data
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./data:/data"
   files:
     image: filebrowser/filebrowser
-    container_name: filebrowser
+    container_name: 00_Management_filebrowser
     ports:
       - "9001:80"
     volumes:
       - "/hosting/:/srv" 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin
+    container_name: 00_Management_phpmyadmin
     ports:
       - "9002:80"
     volumes:
