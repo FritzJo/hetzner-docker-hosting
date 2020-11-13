@@ -1,4 +1,4 @@
-# Wordpress Hosting
+# Hetzner Docker Hosting
 
 
 ## Setup
@@ -54,6 +54,12 @@ hcloud_token = ""
 hcloud_floating_ip = ""
 hcloud_ssh_keys = [""]
 private_key = "/path"
+```
+#### ansible-config.yml
+```
+GCP_Project_ID: "123456789"
+GCP_Bucket_Name: "example-bucket"
+GCP_Backup_Password: "123456789"
 ```
 
 #### Example wordpress service
