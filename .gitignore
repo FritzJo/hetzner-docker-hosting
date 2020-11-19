@@ -2,3 +2,7 @@ terraform/*.tfstate*
 terraform/terraform.tfvars
 *.ini
 terraform/.terraform/
+!instances/
+instances/*
+!instances/management
+!instances/ingress-proxy
