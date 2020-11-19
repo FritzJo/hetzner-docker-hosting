@@ -2,6 +2,12 @@
   vars_files:
   - ../ansible-config.yml
   tasks:
+  - name: Configure floating IP
+    become: yes
+    template:
+      src: 60-floating-ip.cfg.j2
+      dest: /etc/network/interfaces.d/60-floating-ip.cfg
+      mode: '0644'
   - name: Creating folder structure - instances
     become: yes
     file:
