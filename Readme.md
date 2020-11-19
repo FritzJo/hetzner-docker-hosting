@@ -12,15 +12,6 @@
     1. Create an SSH key and add it to your Hetzner project
     2. Create an floating IP, if you don't want to use this, comment out the last 5 lines in [main.tf](terraform/main.tf)
 2. Create terraform.tfvars in the [terraform directory](terraform/) (An example is shown below)
-    1. Hetzner references resources by ID, not name. To get these IDs you have to use the hcloud cli.
-    2. Copy the IDs into the template below
-```
-# SSH Keys
-hcloud ssh-key list
-
-# Floating IP
-hcloud floating-ip list
-```
 3. (optional) Add additional variable configurations to terraform.tfvars, if you want to change the instance locatio, size or operating system. To see all supported options, look at [variables.tf](terraform/variables.tf)
 4. (optional) Edit the [ansible-config.yml](ansible-config.yml) in the root directory. This file contains the credentials for the automated backup to a GCP Storage bucket.
 5. Initialize Terraform and all plugins by running [setup.sh](setup.sh)
@@ -30,7 +21,7 @@ Run the script in the root directory. If everything was configured correctly thi
 ```
 ./setup-vps.sh
 ```
-After that you can login via SSH with the keys you specified in your initial configuration
+After that you can login via SSH with any key that is added to your Hetzner account
 
 ### Automation
 The hosting environment created by these scripts automaticly installs various automation scripts which make it easier for you to manage your services.
@@ -51,8 +42,7 @@ The hosting environment created by these scripts automaticly installs various au
 #### terraform.tfvars
 ```
 hcloud_token = ""
-hcloud_floating_ip = ""
-hcloud_ssh_keys = [""]
+hcloud_floating_ip = "" # Name of FIP
 private_key = "/path"
 ```
 #### ansible-config.yml
