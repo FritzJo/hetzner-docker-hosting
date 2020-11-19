@@ -16,7 +16,7 @@ resource "hcloud_server" "wordpress-vps" {
 	    echo "${hcloud_server.wordpress-vps.ipv4_address} ansible_user=root ansible_ssh_private_key_file=${var.private_key}" | tee -a wordpress-instances.ini;
       export ANSIBLE_HOST_KEY_CHECKING=False;
 	    ansible-playbook -u root --private-key ${var.private_key} -i wordpress-instances.ini ../ansible/playbook-docker.yaml
-      ansible-playbook -u root --private-key ${var.private_key} -i wordpress-instances.ini ../ansible/playbook-hosting.yaml
+      ansible-playbook -u root --private-key ${var.private_key} --extra-vars='{"floating_ip": ${hcloud_floating_ip_assignment.wordpress-ip.ip_address}}' -i wordpress-instances.ini ../ansible/playbook-hosting.yaml
       EOT
   }
 }
@@ -25,3 +25,5 @@ resource "hcloud_floating_ip_assignment" "wordpress-ip" {
   floating_ip_id = var.hcloud_floating_ip
   server_id = hcloud_server.wordpress-vps.id
 }
+
+
