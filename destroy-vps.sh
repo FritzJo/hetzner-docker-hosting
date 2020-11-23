@@ -1,4 +1,4 @@
 #!/bin/bash
 cd terraform || exit 1
-echo yes | terraform apply
+terraform destroy
 cd .. || exit 1
