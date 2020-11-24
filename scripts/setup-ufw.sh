@@ -1,3 +1,5 @@
+#!/bin/bash
+
 echo "Reset rules.."
 sudo ufw --force reset > /dev/null
 
