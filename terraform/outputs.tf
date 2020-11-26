@@ -1,3 +1,3 @@
 output "ephemeral-ip" {
-  value = "${hcloud_server.wordpress-vps.ipv4_address}"
+  value = "${hcloud_server.hosting-vps.ipv4_address}"
 }
