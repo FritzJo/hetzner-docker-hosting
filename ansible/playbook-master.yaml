@@ -1,0 +1,5 @@
+- hosts: all 
+- import_playbook: playbook-hosting.yaml
+- import_playbook: playbook-custom.yaml
+  
+  

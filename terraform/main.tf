@@ -25,7 +25,7 @@ resource "hcloud_server" "hosting-vps" {
 	    echo "${hcloud_server.hosting-vps.ipv4_address} ansible_user=root ansible_ssh_private_key_file=${var.private_key} floating_ip=${data.hcloud_floating_ip.floating-ip.ip_address}" | tee -a hosting-instances.ini;
       export ANSIBLE_HOST_KEY_CHECKING=False;
 	    ansible-playbook -u root --private-key ${var.private_key} -i hosting-instances.ini ../ansible/playbook-docker.yaml
-      ansible-playbook -u root --private-key ${var.private_key} -i hosting-instances.ini ../ansible/playbook-hosting.yaml
+      ansible-playbook -u root --private-key ${var.private_key} -i hosting-instances.ini ../ansible/playbook-master.yaml
       EOT
   }
 }
