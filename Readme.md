@@ -36,7 +36,7 @@ The hosting environment created by these scripts automaticly installs various au
 | Script | Description |
 |--|--|
 | Update | The VM will update itself and all containers in /hosting/instances on reboot. This is also used to start each service after a reboot. |
-| Backup | Not fully functional yet |
+| Backup | Automated backups to GCP Storage. For more information (like how to change the repo password check the official [documentation](https://restic.readthedocs.io/en/latest/070_encryption.html)|
 | Reboot | The VM will restart every Sunday at 3:30AM. This will cause a short downtime. |
 ### Example configuration
 #### terraform.tfvars

@@ -73,6 +73,13 @@
   - name: Initializing containers
     become: yes
     command: chdir=/hosting/scripts ./update.sh
+  - name: Enable auto-backups
+    cron:
+      name: "Backup containers every day at (1:00 AM)"
+      weekday: "0"
+      minute: "0"
+      hour: "1"
+      job: "/hosting/scripts/backup.sh"
   - name: Enable auto-updates and configuration changes on reboot
     cron:
       name: "Update containers at reboot"
