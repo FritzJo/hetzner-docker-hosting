@@ -1,4 +1,6 @@
 #!/bin/bash
+backup_command="restic -r gs:{{ GCP_Bucket_Name }}:/backups backup /hosting/instances"
+backup_init_command="restic -r gs:{{ GCP_Bucket_Name }}:/backups init"
 
 # Check for root
 if [ "$EUID" -ne 0 ]
@@ -14,5 +16,11 @@ export RESTIC_PASSWORD="{{ GCP_Backup_Password }}"
 # Backup for instance data + databases
 # restic -r gs:hosting-private-storage:/docker init
 echo "Backup instance data"
-eval "restic -r gs:{{ GCP_Bucket_Name }}:/backups backup /hosting/instances"
 
+if eval "$backup_command"; then
+  echo "Backup successful!"
+else
+  echo "Initializing Repository first"
+  eval "$backup_init_command"
+  eval "$backup_command"
+fi
