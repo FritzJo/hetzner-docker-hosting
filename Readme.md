@@ -1,6 +1,19 @@
 # Hetzner Docker Hosting
 **Please keep in mind, that this is a WIP project. Don't use these scripts in production!**
 
+## What is this?
+This repository contains scripts and templates for infrastructure automation that will create a Hetzner Cloud VM that is ready to run Docker containers, while keeping maintenance as low as possible. This means that the defaults aren't really "production safe", but good enough for some self-hosted services. Updates for example get automaticly installed and the machine reboots itself to apply kernel updates, which obviously causes a downtime. 
+
+But its perfect for services you dont really want to pay attention to!
+
+## Features
+* Automated updates (OS and Docker images)
+* Automated backups to Google Cloud Storage)
+* Letsencrypt SSL Proxy for all Docker services ([jwilder-nginx-proxy](https://github.com/nginx-proxy/nginx-proxy))
+* Deployment of new docker-compose files via Ansible
+* Some Web UI Management Tools
+
+
 ## Setup
 ### Requirements
 * [HCloud CLI](https://github.com/hetznercloud/cli/releases)
