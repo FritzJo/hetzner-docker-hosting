@@ -48,6 +48,11 @@
       src: ../update-vps.sh
       dest: /hosting/update-vps.sh
       mode: 0775
+  - name: Copy scripts - setup-ufw.sh
+    template:
+      src: ../scripts/setup-ufw.sh
+      dest: /hosting/scripts/setup-ufw.sh
+      mode: 0775
   - name: Install backup software
     apt:
       name: "restic"
@@ -92,3 +97,9 @@
       minute: "30"
       hour: "3"
       job: "/sbin/shutdown -r now"
+  - name: Install firewall software
+    apt:
+      name: "ufw"
+      state: latest
+  - name: "Update firewall rules"
+    command: bash /hosting/scripts/setup-ufw.sh

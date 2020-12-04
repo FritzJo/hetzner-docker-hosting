@@ -12,6 +12,9 @@ sudo ufw default deny outgoing > /dev/null
 echo "Adding SSH.."
 sudo ufw allow 22 > /dev/null
 
+echo "Adding DNS.."
+sudo ufw allow 53 > /dev/null
+
 echo "Adding Webserver communication.."
 sudo ufw allow 80 > /dev/null
 sudo ufw allow 443 > /dev/null
@@ -24,3 +27,5 @@ sudo ufw allow 9001 > /dev/null
 
 # Allow PHPMyAdmin
 sudo ufw allow 9002 > /dev/null
+
+echo y | sudo ufw enable
