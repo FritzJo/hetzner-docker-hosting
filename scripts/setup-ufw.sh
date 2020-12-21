@@ -13,11 +13,11 @@ echo "Adding SSH.."
 sudo ufw allow 22 > /dev/null
 
 echo "Adding DNS.."
-sudo ufw allow 53 > /dev/null
+sudo ufw allow out dns > /dev/null
 
 echo "Adding Webserver communication.."
-sudo ufw allow 80 > /dev/null
-sudo ufw allow 443 > /dev/null
+sudo ufw allow out http > /dev/null
+sudo ufw allow out https > /dev/null
 
 # Allow Portainer
 sudo ufw allow 9000 > /dev/null
