@@ -121,3 +121,9 @@ networks:
 |--|--|
 | proxy | Required for each container that has to be available to the internet |
 | dbadmin | For connection with PHPMyAdmin, required for MySQL database containers |
+
+## Roadmap
+* Add more docker-compose examples
+* Restructure repository to use git for custom configuration
+* Add backup restore feature
+* Add non-root user
