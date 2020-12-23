@@ -1,0 +1,11 @@
+version: '2'
+
+services:
+  web:
+    image: nginx
+    volumes:
+    - ./www:/usr/share/nginx/html
+    environment:
+      LETSENCRYPT_HOST: dev.example.com
+      VIRTUAL_HOST: dev.example.com
+      VIRTUAL_PORT: 80
