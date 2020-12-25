@@ -1,5 +1,4 @@
 # Hetzner Docker Hosting
-**Please keep in mind, that this is a WIP project. Don't use these scripts in production!**
 
 ## What is this?
 This repository contains scripts and templates for infrastructure automation that will create a Hetzner Cloud VM that is ready to run Docker containers, while keeping maintenance as low as possible. This means that the defaults aren't really "production safe", but good enough for some self-hosted services. Updates for example get automaticly installed and the machine reboots itself to apply kernel updates, which obviously causes a downtime. 
@@ -65,49 +64,9 @@ GCP_Bucket_Name: "example-bucket"
 GCP_Backup_Password: "123456789"
 ```
 
-#### Example wordpress service
-If you place this file with the name docker-compose.yml in a new folder of the /hosting/instances directory it will create a new Wordpress instance and a SSL certificate for the domain dev.example.com.
-**Make sure to change the database password before you use this in production!**
+## Examples
+Check the [documentation](docs/examples/example-configs.md) for detailed examples
 
-To actually start the new instance, please run update-vps.sh again.
-```
-version: '2'
-
-services:
-  db:
-    image: mysql:5.7
-    volumes:
-      - ./db_data:/var/lib/mysql
-    command: '--default-authentication-plugin=mysql_native_password'
-    networks:
-      - wp
-    environment:
-      MYSQL_ROOT_PASSWORD: somewordpress
-      MYSQL_DATABASE: wordpress
-      MYSQL_USER: wordpress
-      MYSQL_PASSWORD: wordpress
-
-  wordpress:
-    depends_on:
-      - db
-    image: wordpress:latest
-    networks:
-      - proxy
-      - wp
-    environment:
-      WORDPRESS_DB_HOST: db:3306
-      WORDPRESS_DB_USER: wordpress
-      WORDPRESS_DB_PASSWORD: wordpress
-      WORDPRESS_DB_NAME: wordpress
-      LETSENCRYPT_HOST: dev.example.com
-      VIRTUAL_HOST: dev.example.com
-      VIRTUAL_PORT: 8000
-
-networks:
-  wp:
-  proxy:
-    external: true
-```
 ## Folder structure on the remote machine
 | Network name | Description |
 |--|--|
