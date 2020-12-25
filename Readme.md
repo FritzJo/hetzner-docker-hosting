@@ -24,9 +24,9 @@ But its perfect for services you dont really want to pay attention to!
 1. Prepare your Hetzner environment
     1. Create an SSH key and add it to your Hetzner project
     2. Create an floating IP, if you don't want to use this, comment out the last 5 lines in [main.tf](terraform/main.tf)
-2. Create terraform.tfvars in the [terraform directory](terraform/) (An example is shown below)
+2. Create terraform.tfvars in the [custom terraform directory](custom/terraform/) (An example is shown below)
 3. (optional) Add additional variable configurations to terraform.tfvars, if you want to change the instance locatio, size or operating system. To see all supported options, look at [variables.tf](terraform/variables.tf)
-4. (optional) Edit the [ansible-config.yml](ansible-config.yml) in the root directory. This file contains the credentials for the automated backup to a GCP Storage bucket.
+4. (optional) Edit the [ansible-config.yml](custom/ansible-config.yml) in the custom directory. This file contains the credentials for the automated backup to a GCP Storage bucket.
 5. Initialize Terraform and all plugins by running [setup.sh](setup.sh)
 
 ### Deployment
@@ -122,8 +122,24 @@ networks:
 | proxy | Required for each container that has to be available to the internet |
 | dbadmin | For connection with PHPMyAdmin, required for MySQL database containers |
 
+## How to manage your custom configuration
+All custom configuration, your docker-compose files and all secrets are placed inside the [custom](custom/) directory. 
+
+If you want to use git to manage your files, follow these steps:
+``` bash
+git subtree split -P custom -b <name-of-new-branch>
+
+# Create a new git repository
+mkdir ~/<new-repo> && cd ~/<new-repo>
+git init
+git pull </path/to/hetzner-docker-hosting> <name-of-new-branch>
+
+# Add a remote for the new repo
+git remote add origin <git@github.com:user/new-repo.git>
+git push -u origin master
+```
+
 ## Roadmap
 * Add more docker-compose examples
-* Restructure repository to use git for custom configuration
 * Add backup restore feature
 * Add non-root user
