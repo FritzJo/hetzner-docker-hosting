@@ -1,6 +1,6 @@
 - hosts: all 
   vars_files:
-  - ../ansible-config.yml
+  - ../custom/ansible-config.yml
   tasks:
   - name: Configure floating IP
     become: yes
@@ -33,25 +33,10 @@
       state: directory
       mode: 0775
       recurse: yes
-  - name: Copy scripts - update.sh
+  - name: Copy scripts
     copy:
-      src: ../scripts/update.sh
-      dest: /hosting/scripts/update.sh
-      mode: 0775
-  - name: Copy scripts - backup.sh
-    template:
-      src: ../scripts/backup.sh
-      dest: /hosting/scripts/backup.sh
-      mode: 0775
-  - name: Copy scripts - update-vps.sh
-    template:
-      src: ../update-vps.sh
-      dest: /hosting/update-vps.sh
-      mode: 0775
-  - name: Copy scripts - setup-ufw.sh
-    template:
-      src: ../scripts/setup-ufw.sh
-      dest: /hosting/scripts/setup-ufw.sh
+      src: ../scripts/
+      dest: /hosting/scripts/
       mode: 0775
   - name: Install backup software
     apt:
@@ -71,9 +56,13 @@
     become: yes
     command: docker network create dbadmin
     ignore_errors: yes
-  - name: Copy instance files
+  - name: Copy basic service instance files
     copy:
       src: ../instances/
+      dest: /hosting/instances/
+  - name: Copy custom service instance files
+    copy:
+      src: ../custom/instances/
       dest: /hosting/instances/
   - name: Initializing containers
     become: yes

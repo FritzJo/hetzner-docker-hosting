@@ -90,7 +90,23 @@ Check the [example documentation](docs/example-configs.md) for detailed examples
 | proxy | Required for each container that has to be available to the internet |
 | dbadmin | For connection with PHPMyAdmin, required for MySQL database containers |
 
+## How to manage your custom configuration
+All custom configuration, your docker-compose files and all secrets are placed inside the [custom](custom/) directory. 
+
+If you want to use git to manage your files, follow these steps:
+``` bash
+git subtree split -P custom -b <name-of-new-branch>
+
+# Create a new git repository
+mkdir ~/<new-repo> && cd ~/<new-repo>
+git init
+git pull </path/to/hetzner-docker-hosting> <name-of-new-branch>
+
+# Add a remote for the new repo
+git remote add origin <git@github.com:user/new-repo.git>
+git push -u origin master
+```
+
 ## Roadmap
-* Restructure repository to use git for custom configuration
 * Add backup restore feature
 * Add non-root user
