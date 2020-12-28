@@ -1,0 +1,18 @@
+version: '2'
+
+services:
+  db:
+    image: nginx:latest
+    networks:
+      - proxy
+    volumes:
+      - ./www:/usr/share/nginx/html
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    environment:
+      LETSENCRYPT_HOST: dev.example.com
+      VIRTUAL_HOST: dev.example.com
+      VIRTUAL_PORT: 8000
+
+networks:
+  proxy:
+    external: true

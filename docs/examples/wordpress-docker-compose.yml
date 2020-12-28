@@ -1,0 +1,36 @@
+version: '2'
+
+services:
+  db:
+    image: mysql:5.7
+    volumes:
+      - ./db_data:/var/lib/mysql
+    command: '--default-authentication-plugin=mysql_native_password'
+    networks:
+      - wp
+    environment:
+      MYSQL_ROOT_PASSWORD: somewordpress
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+
+  wordpress:
+    depends_on:
+      - db
+    image: wordpress:latest
+    networks:
+      - proxy
+      - wp
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+      LETSENCRYPT_HOST: dev.example.com
+      VIRTUAL_HOST: dev.example.com
+      VIRTUAL_PORT: 8000
+
+networks:
+  wp:
+  proxy:
+    external: true
