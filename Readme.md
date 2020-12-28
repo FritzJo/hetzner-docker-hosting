@@ -23,10 +23,8 @@ But its perfect for services you dont really want to pay attention to!
 1. Prepare your Hetzner environment
     1. Create an SSH key and add it to your Hetzner project
     2. Create an floating IP, if you don't want to use this, comment out the last 5 lines in [main.tf](terraform/main.tf)
-2. Create terraform.tfvars in the [terraform directory](terraform/) (An example is shown below)
-3. (optional) Add additional variable configurations to terraform.tfvars, if you want to change the instance locatio, size or operating system. To see all supported options, look at [variables.tf](terraform/variables.tf)
-4. (optional) Edit the [ansible-config.yml](ansible-config.yml) in the root directory. This file contains the credentials for the automated backup to a GCP Storage bucket.
-5. Initialize Terraform and all plugins by running [setup.sh](setup.sh)
+2. Create terraform.tfvars in the [custom directory](custom/) (An example is shown [here](docs/examples/script-configuration.md))
+3. Initialize Terraform and all plugins by running [setup.sh](setup.sh)
 
 ### Deployment
 Run the script in the root directory. If everything was configured correctly this will create the VM and install everything.
@@ -50,21 +48,11 @@ The hosting environment created by these scripts automaticly installs various au
 | Update | The VM will update itself and all containers in /hosting/instances on reboot. This is also used to start each service after a reboot. |
 | Backup | Automated backups to GCP Storage. For more information (like how to change the repo password check the official [documentation](https://restic.readthedocs.io/en/latest/070_encryption.html)|
 | Reboot | The VM will restart every Sunday at 3:30AM. This will cause a short downtime. |
-### Example configuration
-#### terraform.tfvars
-```
-hcloud_token = ""
-hcloud_floating_ip = "" # Name of FIP
-private_key = "/path"
-```
-#### ansible-config.yml
-```
-GCP_Project_ID: "123456789"
-GCP_Bucket_Name: "example-bucket"
-GCP_Backup_Password: "123456789"
-```
 
 ## Examples
+### Configuration
+Check the [documentation](docs/examples/script-configuration.md) for detailed examples
+### Services
 Check the [documentation](docs/examples/example-configs.md) for detailed examples
 
 ## Folder structure on the remote machine
@@ -82,7 +70,6 @@ Check the [documentation](docs/examples/example-configs.md) for detailed example
 | dbadmin | For connection with PHPMyAdmin, required for MySQL database containers |
 
 ## Roadmap
-* Add more docker-compose examples
 * Restructure repository to use git for custom configuration
 * Add backup restore feature
 * Add non-root user
