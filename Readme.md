@@ -1,5 +1,23 @@
 # Hetzner Docker Hosting
 
+  * [What is this?](#what-is-this-)
+  * [Features](#features)
+  * [Setup](#setup)
+    + [Requirements](#requirements)
+    + [Pre-Deployment](#pre-deployment)
+    + [Deployment](#deployment)
+    + [Post-Deployment](#post-deployment)
+    + [Automation](#automation)
+      - [Default Services](#default-services)
+      - [Default scripts](#default-scripts)
+  * [Examples](#examples)
+    + [Configuration](#configuration)
+    + [Services](#services)
+  * [Folder structure on the remote machine](#folder-structure-on-the-remote-machine)
+  * [Container Networks](#container-networks)
+  * [Roadmap](#roadmap)
+
+
 ## What is this?
 This repository contains scripts and templates for infrastructure automation that will create a Hetzner Cloud VM that is ready to run Docker containers, while keeping maintenance as low as possible. This means that the defaults aren't really "production safe", but good enough for some self-hosted services. Updates for example get automaticly installed and the machine reboots itself to apply kernel updates, which obviously causes a downtime. 
 
@@ -23,7 +41,7 @@ But its perfect for services you dont really want to pay attention to!
 1. Prepare your Hetzner environment
     1. Create an SSH key and add it to your Hetzner project
     2. Create an floating IP, if you don't want to use this, comment out the last 5 lines in [main.tf](terraform/main.tf)
-2. Create terraform.tfvars in the [custom directory](custom/) (An example is shown [here](docs/examples/script-configuration.md))
+2. Create terraform.tfvars in the [custom directory](custom/) (An example is shown [here](docs/script-configuration.md))
 3. Initialize Terraform and all plugins by running [setup.sh](setup.sh)
 
 ### Deployment
@@ -32,6 +50,9 @@ Run the script in the root directory. If everything was configured correctly thi
 ./setup-vps.sh
 ```
 After that you can login via SSH with any key that is added to your Hetzner account
+
+### Post-Deployment
+How to manage your new server is documented [here](docs/maintenance.md)
 
 ### Automation
 The hosting environment created by these scripts automaticly installs various automation scripts which make it easier for you to manage your services.
@@ -51,9 +72,9 @@ The hosting environment created by these scripts automaticly installs various au
 
 ## Examples
 ### Configuration
-Check the [documentation](docs/script-configuration.md) for detailed examples
+Check the [script documentation](docs/script-configuration.md) for detailed examples
 ### Services
-Check the [documentation](docs/example-configs.md) for detailed examples
+Check the [example documentation](docs/example-configs.md) for detailed examples
 
 ## Folder structure on the remote machine
 | Network name | Description |
