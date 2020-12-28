@@ -51,9 +51,9 @@ The hosting environment created by these scripts automaticly installs various au
 
 ## Examples
 ### Configuration
-Check the [documentation](docs/examples/script-configuration.md) for detailed examples
+Check the [documentation](docs/script-configuration.md) for detailed examples
 ### Services
-Check the [documentation](docs/examples/example-configs.md) for detailed examples
+Check the [documentation](docs/example-configs.md) for detailed examples
 
 ## Folder structure on the remote machine
 | Network name | Description |
