@@ -12,5 +12,5 @@ if ! command -v ansible-playbook &> /dev/null; then
     bash /hosting/scripts/update.sh
 else
     export ANSIBLE_HOST_KEY_CHECKING=False
-    ansible-playbook -u root --private-key $SSH_KEY_FILE -i terraform/hosting-instances.ini ansible/playbook-master.yaml
+    ansible-playbook -u root --private-key $SSH_KEY_FILE -i custom/hosting-instances.ini ansible/playbook-master.yaml
 fi
