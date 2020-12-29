@@ -38,6 +38,10 @@
       src: ../scripts/
       dest: /hosting/scripts/
       mode: 0775
+  - name: Update backup script configuration
+    template:
+      src: ../scripts/backup.sh
+      dest: /hosting/scripts/backup.sh
   - name: Install backup software
     apt:
       name: "restic"
