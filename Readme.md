@@ -105,6 +105,9 @@ git pull </path/to/hetzner-docker-hosting> <name-of-new-branch>
 # Add a remote for the new repo
 git remote add origin <git@github.com:user/new-repo.git>
 git push -u origin master
+
+# Symlink new folder to the custom folder
+ln -s </path/to/new/repo </path/to/hetzner-docker-hosting/custom>
 ```
 
 ## Roadmap
