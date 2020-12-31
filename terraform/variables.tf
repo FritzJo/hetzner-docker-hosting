@@ -1,8 +1,5 @@
 variable "hcloud_token" {}
 variable "hcloud_floating_ip" {}
-variable "hcloud_ssh_keys" {
-    type = list(string)
-}
 
 variable "private_key" {} 
 
