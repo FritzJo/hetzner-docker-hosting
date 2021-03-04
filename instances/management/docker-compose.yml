@@ -9,25 +9,4 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "./data:/data"
-  files:
-    image: filebrowser/filebrowser
-    container_name: 00_Management_filebrowser
-    ports:
-      - "9001:80"
-    volumes:
-      - "/hosting/:/srv"
-      - "./filebrowser.db:/database.db"
-      - "./.filebrowser.json:/.filebrowser.json"  
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: 00_Management_phpmyadmin
-    ports:
-      - "9002:80"
-    volumes:
-      - "./data:/etc/phpmyadmin/"
-    networks:
-      - "dbadmin"
 
-networks:
-  dbadmin:
-    external: true
