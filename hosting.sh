@@ -11,6 +11,7 @@ elif [ "$1" = "destroy" ]; then
     cd terraform || exit 1
     terraform destroy -var-file="../custom/terraform.tfvars"
     cd .. || exit 1
+    rm custom/hosting-instances.ini
 elif [ "$1" = "update" ]; then
     SSH_KEY_FILE=./key
 
