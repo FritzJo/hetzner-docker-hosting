@@ -49,7 +49,7 @@
     become: yes
   - name: Copy backup credentials
     copy:
-      src: ../secrets/gcp-secret.json
+      src: ../custom/secrets/gcp-secret.json
       dest: /hosting/secrets/gcp-secret.json
       mode: 0775
   - name: Create proxy docker network
