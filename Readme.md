@@ -42,12 +42,14 @@ But its perfect for services you dont really want to pay attention to!
     1. Create an SSH key and add it to your Hetzner project
     2. Create an floating IP, if you don't want to use this, comment out the last 5 lines in [main.tf](terraform/main.tf)
 2. Create terraform.tfvars in the [custom directory](custom/) (An example is shown [here](docs/script-configuration.md))
-3. Initialize Terraform and all plugins by running [setup.sh](setup.sh)
-
+3. Initialize Terraform and all plugins by running
+```
+./hosting.sh setup
+```
 ### Deployment
 Run the script in the root directory. If everything was configured correctly this will create the VM and install everything.
 ```
-./setup-vps.sh
+./hosting.sh create
 ```
 After that you can login via SSH with any key that is added to your Hetzner account
 
