@@ -22,10 +22,5 @@ sudo ufw allow out https > /dev/null
 # Allow Portainer
 sudo ufw allow 9000 > /dev/null
 
-# Allow Filebrowser
-sudo ufw allow 9001 > /dev/null
-
-# Allow PHPMyAdmin
-sudo ufw allow 9002 > /dev/null
-
 echo y | sudo ufw enable
+
