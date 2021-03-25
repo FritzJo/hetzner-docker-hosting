@@ -28,7 +28,7 @@ resource "hcloud_server" "hosting-vps" {
 	  command = <<EOT
       sleep 30;
 	    >hosting-instances.ini;
-	    echo "[wordpress]" | tee -a ../custom/hosting-instances.ini;
+	    echo "[hosting-vps]" | tee -a ../custom/hosting-instances.ini;
 	    echo "${hcloud_server.hosting-vps.ipv4_address} ansible_user=root ansible_ssh_private_key_file=${var.private_key} floating_ip=${data.hcloud_floating_ip.floating-ip.ip_address}" | tee -a ../custom/hosting-instances.ini;
       export ANSIBLE_HOST_KEY_CHECKING=False;
 	    ansible-playbook -u root --private-key ${var.private_key} -i ../custom/hosting-instances.ini ../ansible/playbook-docker.yaml
