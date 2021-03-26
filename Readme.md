@@ -62,8 +62,6 @@ The hosting environment created by these scripts automaticly installs various au
 | Service | Description | URL/Port|
 |--|--|--|
 | Portainer | Manage Docker containers and view logs. | :9000 |
-| Filebrowser | Web-based file browser which also can edit files/configs | :9001 |
-| PHPMyAdmin | Manage databases with a web interface (Currently WIP) | :9002 |
 
 #### Default scripts
 | Script | Description |
@@ -90,7 +88,6 @@ Check the [example documentation](docs/example-configs.md) for detailed examples
 | Network name | Description |
 |--|--|
 | proxy | Required for each container that has to be available to the internet |
-| dbadmin | For connection with PHPMyAdmin, required for MySQL database containers |
 
 ## How to manage your custom configuration
 All custom configuration, your docker-compose files and all secrets are placed inside the [custom](custom/) directory. 
@@ -113,5 +110,4 @@ ln -s </path/to/new/repo </path/to/hetzner-docker-hosting/custom>
 ```
 
 ## Roadmap
-* Add backup restore feature
 * Add non-root user
