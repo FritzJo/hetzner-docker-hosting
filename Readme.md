@@ -23,9 +23,11 @@ This repository contains scripts and templates for infrastructure automation tha
 
 But its perfect for services you dont really want to pay attention to!
 
+In addition to the core scripts for deploying and managing Docker environments, the code is extensible with custom ansible files for more flexible setups.
+
 ## Features
 * Automated updates (OS and Docker images)
-* Automated backups to Google Cloud Storage)
+* Automated backups to Google Cloud Storage
 * Letsencrypt SSL Proxy for all Docker services ([jwilder-nginx-proxy](https://github.com/nginx-proxy/nginx-proxy))
 * Deployment of new docker-compose files via Ansible
 * Some Web UI Management Tools
