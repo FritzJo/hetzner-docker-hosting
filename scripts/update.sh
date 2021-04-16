@@ -28,4 +28,8 @@ do
 
     cd $DEPLOYMENT_ROOT || exit 1
 done
+
+echo "Cleaning up old Docker images"
+docker image prune -a || exit 1
+
 echo "Done! Consider rebooting the system"
