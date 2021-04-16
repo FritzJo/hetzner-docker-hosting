@@ -30,6 +30,6 @@ do
 done
 
 echo "Cleaning up old Docker images"
-docker image prune -a || exit 1
+yes | docker image prune -a || exit 1
 
 echo "Done! Consider rebooting the system"
