@@ -113,3 +113,7 @@ ln -s </path/to/new/repo </path/to/hetzner-docker-hosting/custom>
 
 ## Roadmap
 * Add non-root user
+
+# FAQ
+## 1. I updated my scripts and now the ansible instance update fails
+```"Could not find or access '../custom/secrets/gcp-secret.json'``` is an error that occurs, because the location of the secret file got moved to the custom directory. Just copy (or move) your ```secrets``` folder into your existing ```custom``` directory.
