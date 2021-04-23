@@ -1,0 +1,38 @@
+# Installs docker-ce and docker-compose on Debian 10
+
+- hosts: all 
+  tasks:
+  - name: Install packages for apt add repository over HTTPS
+    become: yes
+    apt:
+      name: "{{ packagesdep }}"
+      force_apt_get: yes
+      state: latest
+      update_cache: yes
+    vars:
+      packagesdep:
+      - apt-transport-https
+  - name: Add Lynis apt key.
+    apt_key:
+      url: https://packages.cisofy.com/keys/cisofy-software-public.key
+      id: C80E383C3DE9F082E01391A0366C67DE91CA5D5F
+      state: present
+    become: yes
+    become_method: sudo
+  - name: Add Lynis repository for Debian Buster 
+    apt_repository:
+      repo: deb https://packages.cisofy.com/community/lynis/deb/ stable main 
+      state: present
+    become: yes
+  - name: Index new repository into the cache
+    become: yes
+    apt:
+      name: "*"
+      state: latest
+      update_cache: yes
+      force_apt_get: yes
+  - name: Install Lynis
+    apt:
+      name: "lynis"
+      state: latest
+    become: yes
