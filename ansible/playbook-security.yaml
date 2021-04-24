@@ -2,7 +2,7 @@
 
 - hosts: all 
   tasks:
-  - name: Install packages for apt add repository over HTTPS
+  - name: Install security packages
     become: yes
     apt:
       name: "{{ packagesdep }}"
@@ -12,6 +12,11 @@
     vars:
       packagesdep:
       - apt-transport-https
+      - clamav
+      - debsums
+      - apt-show-versions
+      - libpam-passwdqc
+      - ntp
   - name: Add Lynis apt key.
     apt_key:
       url: https://packages.cisofy.com/keys/cisofy-software-public.key
@@ -36,3 +41,20 @@
       name: "lynis"
       state: latest
     become: yes
+  - name: Copy Lynis config
+    copy:
+      src: security/default.prf
+      dest: /etc/lynis/default.prf
+  - name: Copy limits.conf
+    copy:
+      src: security/limits.conf
+      dest: /etc/security/limits.conf
+  - name: Update sshd config
+    copy:
+      src: security/sshd_config
+      dest: /etc/ssh/sshd_config
+  - name: Disable not required kernel modules
+    copy:
+      src: security/security-blacklist.conf
+      dest: /etc/modprobe.d/blacklist.conf
+    
