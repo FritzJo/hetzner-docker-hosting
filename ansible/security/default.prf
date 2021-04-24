@@ -447,8 +447,9 @@ skip-test=BANN-7130
 skip-test=NAME-4028
 skip-test=FIRE-4513
 # Firewall rules are managed by scripts
-skip-test=ACCT-0622
-skip-test=ACCT-9226
-skip-test=ACCT-9228
+skip-test=ACCT-9622
+skip-test=ACCT-9626
+skip-test=ACCT-9628
 # Disable accounting checks due to storage limitations
+
 #EOF
