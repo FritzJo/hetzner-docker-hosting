@@ -9,10 +9,15 @@ fi
 apply_external_rules () {
     FILENAME=$1
     echo "Processing $FILENAME"
-
     while read -r line; do
-        echo "ufw $line"
-        eval "$(ufw "$line")"
+        echo "Validating $line"
+        if [[ "$line" =~ ^allow|deny\ [0-9]{1,6}$ ]]
+        then
+          echo " --> OK!"
+          eval "$(ufw "$line")"
+        else
+          echo " --> INVALID!"
+        fi
         done < "$FILENAME"
 }
 
