@@ -1,26 +1,30 @@
 #!/bin/bash
 
+# Check for root
+if [ "$EUID" -ne 0 ]
+  then echo "Please run this backup script as root"
+  exit
+fi
 echo "Reset rules.."
-sudo ufw --force reset > /dev/null
+ufw --force reset > /dev/null
 
 echo "Default deny incoming.."
-sudo ufw default deny incoming > /dev/null
+ufw default deny incoming > /dev/null
 
 echo "Default deny outgoing.."
-sudo ufw default deny outgoing > /dev/null
+ufw default deny outgoing > /dev/null
 
 echo "Adding SSH.."
-sudo ufw allow 22 > /dev/null
+ufw allow 22 > /dev/null
 
 echo "Adding DNS.."
-sudo ufw allow out dns > /dev/null
+ufw allow out dns > /dev/null
 
 echo "Adding Webserver communication.."
-sudo ufw allow out http > /dev/null
-sudo ufw allow out https > /dev/null
+ufw allow out http > /dev/null
+ufw allow out https > /dev/null
 
-# Allow Portainer
-sudo ufw allow 9000 > /dev/null
+echo "Adding Portainer.."
+ufw allow 9000 > /dev/null
 
-echo y | sudo ufw enable
-
+echo y | ufw enable
