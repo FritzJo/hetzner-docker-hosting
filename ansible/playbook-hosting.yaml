@@ -94,5 +94,13 @@
     apt:
       name: "ufw"
       state: latest
+  - name: Copy firewall rules
+    copy:
+      src: ../ansible/security/ufw-rules.conf
+      dest: /hosting/secrets/ufw-rules.conf
+  - name: Copy custom firewall rules
+    copy:
+      src: ../custom/ansible/security/custom-ufw.conf
+      dest: /hosting/secrets/custom-ufw.conf
   - name: "Update firewall rules"
     command: bash /hosting/scripts/setup-ufw.sh

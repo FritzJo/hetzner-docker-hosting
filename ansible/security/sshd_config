@@ -29,7 +29,8 @@ LogLevel VERBOSE
 # Authentication:
 
 #LoginGraceTime 2m
-PermitRootLogin (FORCED-COMMANDS-ONLY|NO|PROHIBIT-PASSWORD|WITHOUT-PASSWORD)
+#PermitRootLogin (FORCED-COMMANDS-ONLY|NO|PROHIBIT-PASSWORD|WITHOUT-PASSWORD)
+PermitRootLogin yes
 #StrictModes yes
 MaxAuthTries 3
 MaxSessions 2
