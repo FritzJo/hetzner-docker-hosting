@@ -13,8 +13,8 @@ You have to update the file to match your own domain and change the default pass
 ## List of examples
 | Name | File | Notes |
 |--|--|--|
-|Wordpress|[wordpress-docker-compose.yml](docs/examples/wordpress-docker-compose.yml)||
-|Nginx Webserver|[nginx-docker-compose.yml](docs/examples/nginx-docker-compose.yml)||
+|Wordpress|[wordpress-docker-compose.yml](https://github.com/FritzJo/hetzner-docker-hosting/blob/master/docs/examples/wordpress-docker-compose.yml)||
+|Nginx Webserver|[nginx-docker-compose.yml](https://github.com/FritzJo/hetzner-docker-hosting/blob/master/docs/examples/nginx-docker-compose.yml)||
 
 ## How to adapt you own docker-compose files
 Basic steps:
