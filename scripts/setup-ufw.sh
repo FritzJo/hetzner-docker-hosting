@@ -2,7 +2,7 @@
 
 # Check for root
 if [ "$EUID" -ne 0 ]
-  then echo "Please run this backup script as root"
+  then echo "Please run this script as root"
   exit
 fi
 
@@ -14,7 +14,7 @@ apply_external_rules () {
         if [[ "$line" =~ ^allow|deny\ [0-9]{1,6}$ ]]
         then
           echo " --> OK!"
-          eval "$(ufw "$line")"
+          eval "ufw $line"
         else
           echo " --> INVALID!"
         fi
@@ -30,6 +30,7 @@ ufw default deny incoming > /dev/null
 echo "Default deny outgoing.."
 ufw default deny outgoing > /dev/null
 
-apply_external_rules "../ansible/security/ufw-rules.conf"
+apply_external_rules "/hosting/secrets/ufw-rules.conf"
+apply_external_rules "/hosting/secrets/custom-ufw.conf"
 
 echo y | ufw enable
