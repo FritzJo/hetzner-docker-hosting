@@ -1,0 +1,5 @@
+- hosts: all 
+- import_playbook: playbooks/00-base.yaml
+- import_playbook: playbooks/05-security.yaml
+- import_playbook: playbooks/10-docker.yaml
+- import_playbook: playbooks/20-hosting.yaml

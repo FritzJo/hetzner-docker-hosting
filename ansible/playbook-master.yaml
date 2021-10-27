@@ -1,6 +1,0 @@
-- hosts: all 
-- import_playbook: playbook-hosting.yaml
-- import_playbook: playbook-security.yaml
-- import_playbook: ../custom/ansible/playbook-custom.yaml
-  
-  
