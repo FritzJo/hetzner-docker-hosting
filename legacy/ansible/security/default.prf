@@ -1,0 +1,455 @@
+#################################################################################
+#
+#
+# Lynis - Default scan profile
+#
+#
+#################################################################################
+#
+#
+# This profile provides Lynis with most of its initial values to perform a
+# system audit.
+#
+#
+# WARNINGS
+# ----------
+#
+# Do NOT make changes to this file. Instead, copy only your changes into
+# the file custom.prf and put it in the same directory as default.prf
+#
+# To discover where your profiles are located: lynis show profiles
+#
+#
+# Lynis performs a strict check on profiles to avoid the inclusion of
+# possibly harmful injections. See include/profiles for details.
+#
+#
+#################################################################################
+#
+# All empty lines or with the # prefix will be skipped
+#
+#################################################################################
+
+# Use colored output
+colors=yes
+
+# Compressed uploads (set to zero when errors with uploading occur)
+compressed-uploads=yes
+
+# Amount of connections in WAIT state before reporting it as a suggestion
+#connections-max-wait-state=5000
+
+# Debug mode (for debugging purposes, extra data logged to screen)
+#debug=yes
+
+# Show non-zero exit code when warnings are found
+error-on-warnings=no
+
+# Use Lynis in your own language (by default auto-detected)
+language=
+
+# Log tests from another guest operating system (default: yes)
+#log-tests-incorrect-os=yes
+
+# Define if available NTP daemon is configured as a server or client on the network
+# values: server or client (default: client)
+#ntpd-role=client
+
+# Defines the role of the system (personal, workstation or server)
+machine-role=server
+
+# Ignore some stratum 16 hosts (for example when running as time source itself)
+#ntp-ignore-stratum-16-peer=127.0.0.1
+
+# Profile name, will be used as title/description
+profile-name=Default Audit Template
+
+# Number of seconds to pause between every test (0 is no pause)
+pause-between-tests=0
+
+# Quick mode (do not wait for keypresses)
+quick=yes
+
+# Refresh software repositories to help detecting vulnerable packages
+refresh-repositories=yes
+
+# Show solution for findings
+show-report-solution=yes
+
+# Show inline tips about the tool
+show-tool-tips=yes
+
+# Skip plugins
+skip-plugins=no
+
+# Skip a test (one per line)
+#skip-test=SSH-7408
+
+# Skip a particular option within a test (when applicable)
+#skip-test=SSH-7408:loglevel
+#skip-test=SSH-7408:permitrootlogin
+
+# Skip Lynis upgrade availability test (default: no)
+#skip-upgrade-test=yes
+
+# Locations where to search for SSL certificates (separate paths with a colon)
+ssl-certificate-paths=/etc/apache2:/etc/dovecot:/etc/httpd:/etc/letsencrypt:/etc/pki:/etc/postfix:/etc/refind.d/keys:/etc/ssl:/opt/psa/var/certificates:/usr/local/psa/var/certificates:/usr/local/share/ca-certificates:/usr/share/ca-certificates:/usr/share/gnupg:/var/www:/srv/www
+ssl-certificate-paths-to-ignore=/etc/letsencrypt/archive:
+ssl-certificate-include-packages=no
+
+# Scan type - how deep the audit should be (light, normal or full)
+test-scan-mode=full
+
+# Verbose output
+verbose=no
+
+
+#################################################################################
+#
+# Plugins
+# ---------------
+# Define which plugins are enabled
+#
+# Notes:
+# - Nothing happens if plugin isn't available
+# - There is no order in execution of plugins
+# - See documentation about how to use plugins and phases
+# - Some are for Lynis Enterprise users only
+#
+#################################################################################
+
+# Lynis plugins to enable
+plugin=authentication
+plugin=compliance
+plugin=configuration
+plugin=control-panels
+plugin=crypto
+plugin=dns
+plugin=docker
+plugin=file-integrity
+plugin=file-systems
+plugin=firewalls
+plugin=forensics
+plugin=hardware
+plugin=intrusion-detection
+plugin=intrusion-prevention
+plugin=kernel
+plugin=malware
+plugin=memory
+plugin=nginx
+plugin=pam
+plugin=processes
+plugin=security-modules
+plugin=software
+plugin=system-integrity
+plugin=systemd
+plugin=users
+
+# Disable a particular plugin (will overrule an enabled plugin)
+#disable-plugin=authentication
+
+#################################################################################
+#
+# Kernel options
+# ---------------
+# config-data=, followed by:
+#
+# - Type                     = Set to 'sysctl'
+# - Setting                  = value of sysctl key (e.g. kernel.sysrq)
+# - Expected value           = Preferred value for key (e.g. 0)
+# - Hardening Points         = Number of hardening points (typically 1 point per key) (1)
+# - Description              = Textual description about the sysctl key(Disable magic SysRQ)
+# - Related file or command  = For example, sysctl -a to retrieve more details
+# - Solution field           = Specifies more details or where to find them (url:URL, text:TEXT, or -)
+#
+#################################################################################
+
+# Config
+# - Type (sysctl)
+# - Setting (kernel.sysrq)
+# - Expected value (0)
+# - Hardening Points (1)
+# - Description (Disable magic SysRQ)
+# - Related file or command (sysctl -a)
+# - Solution field (url:URL, text:TEXT, or -)
+
+# Processes
+config-data=sysctl;security.bsd.see_other_gids;0;1;Groups only see their own processes;sysctl -a;-;category:security;
+config-data=sysctl;security.bsd.see_other_uids;0;1;Users only see their own processes;sysctl -a;-;category:security;
+config-data=sysctl;security.bsd.stack_guard_page;1;1;Enable stack smashing protection (SSP)/ProPolice to defend against possible buffer overflows;-;category:security;
+config-data=sysctl;security.bsd.unprivileged_proc_debug;0;1;Unprivileged processes can not use process debugging;sysctl -a;-;category:security;
+config-data=sysctl;security.bsd.unprivileged_read_msgbuf;0;1;Unprivileged processes can not read the kernel message buffer;sysctl -a;-;category:security;
+
+# Kernel
+config-data=sysctl;fs.suid_dumpable;0;1;Restrict core dumps;sysctl -a;url:https;//www.kernel.org/doc/Documentation/sysctl/fs.txt;category:security;
+config-data=sysctl;fs.protected_fifos;2;1;Restrict FIFO special device creation behavior;sysctl -a;url:https;//www.kernel.org/doc/Documentation/sysctl/fs.txt;category:security;
+config-data=sysctl;fs.protected_hardlinks;1;1;Restrict hardlink creation behavior;sysctl -a;url:https;//www.kernel.org/doc/Documentation/sysctl/fs.txt;category:security;
+config-data=sysctl;fs.protected_regular;2;1;Restrict regular files creation behavior;sysctl -a;url:https;//www.kernel.org/doc/Documentation/sysctl/fs.txt;category:security;
+config-data=sysctl;fs.protected_symlinks;1;1;Restrict symlink following behavior;sysctl -a;url:https;//www.kernel.org/doc/Documentation/sysctl/fs.txt;category:security;
+#config-data=sysctl;kern.randompid=2345;Randomize PID numbers with a specific modulus;sysctl -a;-;category:security;
+config-data=sysctl;kern.sugid_coredump;0;1;No description;sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;kernel.core_setuid_ok;0;1;No description;sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;kernel.core_uses_pid;1;1;No description;sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;kernel.ctrl-alt-del;0;1;No description;sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;kernel.dmesg_restrict;1;1;Restrict use of dmesg;sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;kernel.exec-shield-randomize;1;1;No description;sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;kernel.exec-shield;1;1;No description;sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;kernel.kptr_restrict;2;1;Restrict access to kernel symbols;sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;kernel.maps_protect;1;1;Restrict access to /proc/[pid]/maps;sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;kernel.modules_disabled;1;1;Restrict module loading once this sysctl value is loaded;sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;kernel.perf_event_paranoid;3;1;Restrict unprivileged access to the perf_event_open() system call.;sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;kernel.randomize_va_space;2;1;Randomize of memory address locations (ASLR);sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;kernel.suid_dumpable;0;1;Restrict core dumps;sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;kernel.sysrq;0;1;Disable magic SysRQ;sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;kernel.unprivileged_bpf_disabled;1;1;Restrict BPF for unprivileged users;sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;kernel.use-nx;0;1;No description;sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;kernel.yama.ptrace_scope;1|2|3;1;Disable process tracing for everyone;-;category:security;
+
+# Network
+config-data=sysctl;net.core.bpf_jit_harden;2;1;Hardened BPF JIT compilation;sysctl -a;url:https;//kernel.org/doc/Documentation/sysctl/kernel.txt;category:security;
+config-data=sysctl;net.inet.ip.linklocal.in.allowbadttl;0;
+config-data=sysctl;net.inet.tcp.always_keepalive;0;1;Disable TCP keep alive detection for dead peers as the keepalive can be spoofed;-;category:security;
+#config-data=sysctl;net.inet.tcp.fast_finwait2_recycle;1;1;Recycle FIN/WAIT states more quickly (DoS mitigation step, with risk of false RST);-;category:security;
+config-data=sysctl;net.inet.tcp.nolocaltimewait;1;1;Remove the TIME_WAIT state for loopback interface;-;category:security;
+config-data=sysctl;net.inet.tcp.path_mtu_discovery;0;1;Disable MTU discovery as many hosts drop the ICMP type 3 packets;-;category:security;
+config-data=sysctl;net.inet.icmp.bmcastecho;0;1;Ignore ICMP packets directed to broadcast address;-;category:security;
+config-data=sysctl;net.inet.tcp.icmp_may_rst;0;1;ICMP may not send RST to avoid spoofed ICMP/UDP floods;-;category:security;
+config-data=sysctl;net.inet.icmp.drop_redirect;1;1;Do not allow redirected ICMP packets;-;category:security;
+config-data=sysctl;net.inet.icmp.rediraccept;0;1;Disable incoming ICMP redirect routing redirects;-;category:security;
+config-data=sysctl;net.inet.icmp.timestamp;0;1;Disable timestamps;-;category:security;
+config-data=sysctl;net.inet.ip.accept_sourceroute;0;1;Disable IP source routing;-;category:security;
+config-data=sysctl;net.inet.ip.check_interface;1;1;Verify that a packet arrived on the right interface;-;category:security;
+config-data=sysctl;net.inet.ip.forwarding;0;1;Do not allow forwarding of traffic;-;category:security;
+config-data=sysctl;net.inet.ip.process_options;0;1;Ignore any IP options in the incoming packets;-;category:security;
+config-data=sysctl;net.inet.ip.random_id;1;1;Use a random IP id to each packet leaving the system;-;category:security;
+config-data=sysctl;net.inet.ip.redirect;0;1;Disable/Ignore ICMP routing redirects;-;category:security;
+config-data=sysctl;net.inet.ip.sourceroute;0;1;Disable IP source routing;-;category:security;
+config-data=sysctl;net.inet.ip6.redirect;0;1;Disable/Ignore ICMP routing redirects;-;category:security;
+config-data=sysctl;net.inet.tcp.blackhole;2;1;Do not sent RST but drop traffic when delivered to closed TCP port;-;category:security;
+config-data=sysctl;net.inet.tcp.drop_synfin;1;1;SYN/FIN packets will be dropped on initial connection;-;category:security;
+config-data=sysctl;net.inet.udp.blackhole;1;1;Do not sent RST but drop traffic when delivered to closed UDP port;-;category:security;
+config-data=sysctl;net.inet6.icmp6.rediraccept;0;1;Disable incoming ICMP redirect routing redirects;-;category:security;
+config-data=sysctl;net.inet6.ip6.forwarding;0;1;Do not allow forwarding of traffic;-;category:security;
+config-data=sysctl;net.inet6.ip6.fw.enable;1;1;Enable filtering;-;category:security;
+config-data=sysctl;net.inet6.ip6.redirect;0;1;Disable sending ICMP redirect routing redirects;-;category:security;
+config-data=sysctl;net.ipv4.conf.all.accept_redirects;0;1;Disable/Ignore ICMP routing redirects;-;category:security;
+config-data=sysctl;net.ipv4.conf.all.accept_source_route;0;1;Disable IP source routing;-;category:security;
+config-data=sysctl;net.ipv4.conf.all.bootp_relay;0;1;Do not relay BOOTP packets;-;category:security;
+config-data=sysctl;net.ipv4.conf.all.forwarding;0;1;Disable IP source routing;-;category:security;
+config-data=sysctl;net.ipv4.conf.all.log_martians;1;1;Log all packages for which the host does not have a path back to the source;-;category:security;
+config-data=sysctl;net.ipv4.conf.all.mc_forwarding;0;1;Disable IP source routing;-;category:security;
+config-data=sysctl;net.ipv4.conf.all.proxy_arp;0;1;Do not relay ARP packets;-;category:security;
+config-data=sysctl;net.ipv4.conf.all.rp_filter;1;1;Enforce ingress/egress filtering for packets;-;category:security;
+config-data=sysctl;net.ipv4.conf.all.send_redirects;0;1;Disable/Ignore ICMP routing redirects;-;category:security;
+config-data=sysctl;net.ipv4.conf.default.accept_redirects;0;1;Disable/Ignore ICMP routing redirects;-;category:security;
+config-data=sysctl;net.ipv4.conf.default.accept_source_route;0;1;Disable IP source routing;-;category:security;
+config-data=sysctl;net.ipv4.conf.default.log_martians;1;1;Log all packages for which the host does not have a path back to the source;-;category:security;
+config-data=sysctl;net.ipv4.icmp_echo_ignore_broadcasts;1;1;Ignore ICMP packets directed to broadcast address;-;category:security;
+config-data=sysctl;net.ipv4.icmp_ignore_bogus_error_responses;1;1;Ignore-;category:security;
+#config-data=sysctl;net.ipv4.ip_forward;0;1;Do not forward traffic;-;category:security;
+config-data=sysctl;net.ipv4.tcp_syncookies;1;1;Use SYN cookies to prevent SYN attack;-;category:security;
+config-data=sysctl;net.ipv4.tcp_timestamps;0|1;1;Disable TCP time stamps or enable them with different offsets;-;category:security;
+config-data=sysctl;net.ipv6.conf.all.send_redirects;0;1;Disable/ignore ICMP routing redirects;-;category:security;
+config-data=sysctl;net.ipv6.conf.all.accept_redirects;0;1;Disable/Ignore ICMP routing redirects;-;category:security;
+config-data=sysctl;net.ipv6.conf.all.accept_source_route;0;1;Disable IP source routing;-;category:security;
+config-data=sysctl;net.ipv6.conf.default.accept_redirects;0;1;Disable/Ignore ICMP routing redirects;-;category:security;
+config-data=sysctl;net.ipv6.conf.default.accept_source_route;0;1;Disable IP source routing;-;category:security;
+
+# Other
+config-data=sysctl;dev.tty.ldisc_autoload;0;1;Disable loading of TTY line disciplines;-;category:security;
+config-data=sysctl;hw.kbd.keymap_restrict_change;4;1;Disable changing the keymap by non-privileged users;-;category:security;
+#sysctl;kern.securelevel;1^2^3;1;FreeBSD security level;
+#security.jail.jailed; 0
+#security.jail.jail_max_af_ips; 255
+#security.jail.mount_allowed; 0
+#security.jail.chflags_allowed; 0
+#security.jail.allow_raw_sockets; 0
+#security.jail.enforce_statfs; 2
+#security.jail.sysvipc_allowed; 0
+#security.jail.socket_unixiproute_only; 1
+#security.jail.set_hostname_allowed; 1
+#security.bsd.suser_enabled; 1
+#security.bsd.unprivileged_proc_debug; 1
+#security.bsd.conservative_signals; 1
+#security.bsd.unprivileged_read_msgbuf; 1
+#security.bsd.unprivileged_get_quota; 0
+config-data=sysctl;security.bsd.hardlink_check_gid;1;1;Unprivileged processes are not allowed to create hard links to files which are owned by other groups;-;category:security;
+config-data=sysctl;security.bsd.hardlink_check_uid;1;1;Unprivileged processes are not allowed to create hard links to files which are owned by other users;-;category:security;
+
+
+#################################################################################
+#
+# permfile
+# ---------------
+# permfile=file name:file permissions:owner:group:action:
+# Action = NOTICE or WARN
+# Examples:
+# permfile=/etc/test1.dat:600:root:wheel:NOTICE:
+# permfile=/etc/test1.dat:640:root:-:WARN:
+#
+#################################################################################
+
+#permfile=/etc/inetd.conf:rw-------:root:-:WARN:
+#permfile=/etc/fstab:rw-r--r--:root:-:WARN:
+permfile=/boot/grub/grub.cfg:rw-------:root:root:WARN:
+permfile=/boot/grub2/grub.cfg:rw-------:root:root:WARN:
+permfile=/boot/grub2/user.cfg:rw-------:root:root:WARN:
+permfile=/etc/at.allow:rw-------:root:-:WARN:
+permfile=/etc/at.deny:rw-------:root:-:WARN:
+permfile=/etc/cron.allow:rw-------:root:-:WARN:
+permfile=/etc/cron.deny:rw-------:root:-:WARN:
+permfile=/etc/crontab:rw-------:root:-:WARN:
+permfile=/etc/group:rw-r--r--:root:-:WARN:
+permfile=/etc/group-:rw-r--r--:root:-:WARN:
+permfile=/etc/hosts.allow:rw-r--r--:root:root:WARN:
+permfile=/etc/hosts.deny:rw-r--r--:root:root:WARN:
+permfile=/etc/issue:rw-r--r--:root:root:WARN:
+permfile=/etc/issue.net:rw-r--r--:root:root:WARN:
+permfile=/etc/lilo.conf:rw-------:root:-:WARN:
+permfile=/etc/motd:rw-r--r--:root:root:WARN:
+permfile=/etc/passwd:rw-r--r--:root:-:WARN:
+permfile=/etc/passwd-:rw-r--r--:root:-:WARN:
+permfile=/etc/ssh/sshd_config:rw-------:root:-:WARN:
+permfile=/etc/hosts.equiv:rw-r--r--:root:root:WARN:
+permfile=/etc/shosts.equiv:rw-r--r--:root:root:WARN:
+permfile=/root/.rhosts:rw-------:root:root:WARN:
+permfile=/root/.rlogin:rw-------:root:root:WARN:
+permfile=/root/.shosts:rw-------:root:root:WARN:
+
+# These permissions differ by OS
+#permfile=/etc/gshadow:---------:root:-:WARN:
+#permfile=/etc/gshadow-:---------:root:-:WARN:
+#permfile=/etc/shadow:---------:root:-:WARN:
+#permfile=/etc/shadow-:---------:root:-:WARN:
+
+
+#################################################################################
+#
+# permdir
+# ---------------
+# permdir=directory name:file permissions:owner:group:action when permissions are different:
+#
+#################################################################################
+
+permdir=/root/.ssh:rwx------:root:-:WARN:
+permdir=/etc/cron.d:rwx------:root:root:WARN:
+permdir=/etc/cron.daily:rwx------:root:root:WARN:
+permdir=/etc/cron.hourly:rwx------:root:root:WARN:
+permdir=/etc/cron.weekly:rwx------:root:root:WARN:
+permdir=/etc/cron.monthly:rwx------:root:root:WARN:
+
+
+# Ignore some specific home directories
+# One directory per line; directories will be skipped for home directory specific
+# checks, like file permissions, SSH and other configuration files
+#ignore-home-dir=/home/user
+
+
+# Allow promiscuous interfaces
+#   <option>:<promiscuous interface name>:<description>:
+#if_promisc:pflog0:pf log daemon interface:
+
+
+# The URL prefix and append to the URL for controls or your custom tests
+# Link will be formed as {control-url-protocol}://{control-url-prepend}CONTROL-ID{control-url-append}
+#control-url-protocol=https
+#control-url-prepend=cisofy.com/control/
+#control-url-append=/
+
+# The URL prefix and append to URL's for your custom tests
+#custom-url-protocol=https
+#custom-url-prepend=your-domain.example.org/control-info/
+#custom-url-append=/
+
+
+#################################################################################
+#
+# Operating system specific
+# -------------------------
+#
+#################################################################################
+
+# Skip the FreeBSD portaudit test
+#freebsd-skip-portaudit=yes
+
+# Skip security repository check for Debian based systems
+#debian-skip-security-repository=yes
+
+
+
+#################################################################################
+#
+# Lynis Enterprise options
+# ------------------------
+#
+#################################################################################
+
+# Allow this system to be purged when it is outdated (default: not defined).
+# This is useful for ephemeral systems which are short-lived.
+#allow-auto-purge=yes
+
+# Sometimes it might be useful to override the host identifiers.
+# Use only hexadecimal values (0-9, a-f), with 40 and 64 characters in length.
+#
+#hostid=40-char-hash
+#hostid2=64-char-hash
+
+# Lynis Enterprise license key
+license-key=
+
+# Proxy settings
+# Protocol (http, https, socks5)
+#proxy-protocol=https
+
+# Proxy server
+#proxy-server=10.0.1.250
+
+# Define proxy port to use
+#proxy-port=3128
+
+# Define the group names to link to this system (preferably single words). Default setting: append
+# To clear groups before assignment, add 'action:clear' as last groupname
+#system-groups=groupname1,groupname2,groupname3
+
+# Define which compliance standards are audited and reported on. Disable this if not required.
+compliance-standards=cis,hipaa,iso27001,pci-dss
+
+# Provide the name of the customer/client
+#system-customer-name=mycustomer
+
+# Upload data to central server
+upload=no
+
+# The hostname/IP address to receive the data
+upload-server=
+
+# Provide options to cURL (or other upload tool) when uploading data.
+# upload-options=--insecure (use HTTPS, but skip certificate check for self-signed certificates)
+upload-options=
+
+# Link one or more tags to a system
+#tags=db,production,ssn-1304
+skip-test=BOOT-5122
+# GRUB password
+skip-test=AUTH-9286 
+# Password reset
+skip-test=FILE-6310 
+# Partions
+skip-test=USB-1000
+# USB not used in cloud VMs
+skip-test=STRG-1846
+# Firewire not used in cloud VMs
+skip-test=PKGS-7420
+# Auto-updates already handled by script set
+skip-test=BANN-7126
+skip-test=BANN-7130
+# Banner
+skip-test=NAME-4028
+skip-test=FIRE-4513
+# Firewall rules are managed by scripts
+skip-test=ACCT-9622
+skip-test=ACCT-9626
+skip-test=ACCT-9628
+# Disable accounting checks due to storage limitations
+
+#EOF
