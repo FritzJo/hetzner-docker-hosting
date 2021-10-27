@@ -32,4 +32,4 @@ ufw default deny outgoing > /dev/null
 
 apply_external_rules "/hosting/secrets/ufw-rules.conf"
 
-echo y | ufw enable
+#echo y | ufw enable

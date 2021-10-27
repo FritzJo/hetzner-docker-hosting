@@ -3,3 +3,5 @@
 - import_playbook: playbooks/05-security.yaml
 - import_playbook: playbooks/10-docker.yaml
 - import_playbook: playbooks/20-hosting.yaml
+
+- import_playbook: ../custom/ansible/playbook-custom.yaml
