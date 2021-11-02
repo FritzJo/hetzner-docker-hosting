@@ -20,7 +20,6 @@ resource "hcloud_server" "hosting-vps" {
   location = var.hcloud_location
   server_type = var.hcloud_server_type
   keep_disk = true
-  #ssh_keys =  var.hcloud_ssh_keys
   ssh_keys = data.hcloud_ssh_keys.all_keys.ssh_keys.*.id
 
   # Software deployments
@@ -29,10 +28,9 @@ resource "hcloud_server" "hosting-vps" {
       sleep 30;
 	    >hosting-instances.ini;
 	    echo "[hosting-vps]" | tee -a ../custom/hosting-instances.ini;
-	    echo "${hcloud_server.hosting-vps.ipv4_address} ansible_user=root ansible_ssh_private_key_file=${var.private_key} floating_ip=${data.hcloud_floating_ip.floating-ip.ip_address}" | tee -a ../custom/hosting-instances.ini;
+	    echo "${hcloud_server.hosting-vps.ipv4_address} floating_ip=${data.hcloud_floating_ip.floating-ip.ip_address}" | tee -a ../custom/hosting-instances.ini;
       export ANSIBLE_HOST_KEY_CHECKING=False;
-	    ansible-playbook -u root --private-key ${var.private_key} -i ../custom/hosting-instances.ini ../ansible/playbook-docker.yaml
-      ansible-playbook -u root --private-key ${var.private_key} -i ../custom/hosting-instances.ini ../ansible/playbook-master.yaml
+	    ansible-playbook ../ansible/master.yaml
       EOT
   }
 }

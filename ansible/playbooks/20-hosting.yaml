@@ -1,0 +1,15 @@
+- hosts: all 
+  tasks:
+  - name: Create proxy docker network
+    become: yes
+    command: docker network create proxy
+    ignore_errors: yes
+
+  - name: Copy service files
+    copy:
+      src: ../services/
+      dest: /hosting/instances/
+
+  - name: Initializing containers
+    become: yes
+    command: /hosting/scripts/update.sh

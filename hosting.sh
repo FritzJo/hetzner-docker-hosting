@@ -13,19 +13,8 @@ elif [ "$1" = "destroy" ]; then
     cd .. || exit 1
     rm custom/hosting-instances.ini
 elif [ "$1" = "update" ]; then
-    SSH_KEY_FILE=./key
-
-    echo -n "Initiate a backup first? (y/n)? "
-    read -r answer
-    if [ "$answer" != "${answer#[Yy]}" ] ;then
-        bash /hosting/scripts/backup.sh
-    fi
-
-    if ! command -v ansible-playbook &> /dev/null; then
-        echo "Ansible could not be found, running in local mode!"
-        bash /hosting/scripts/update.sh
-    else
-        export ANSIBLE_HOST_KEY_CHECKING=False
-        ansible-playbook -u root --private-key $SSH_KEY_FILE -i custom/hosting-instances.ini ansible/playbook-master.yaml
-    fi
+    export ANSIBLE_HOST_KEY_CHECKING=False
+    cd ansible || exit 1
+    ansible-playbook master.yaml
+    cd .. || exit 1
 fi

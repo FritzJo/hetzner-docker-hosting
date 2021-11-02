@@ -14,7 +14,7 @@ apply_external_rules () {
         if [[ "$line" =~ ^allow|deny\ [0-9]{1,6}$ ]]
         then
           echo " --> OK!"
-          eval "$(ufw "$line")"
+          eval "ufw $line"
         else
           echo " --> INVALID!"
         fi
@@ -30,6 +30,6 @@ ufw default deny incoming > /dev/null
 echo "Default deny outgoing.."
 ufw default deny outgoing > /dev/null
 
-apply_external_rules "../ansible/security/ufw-rules.conf"
+apply_external_rules "/hosting/secrets/ufw-rules.conf"
 
-echo y | ufw enable
+#echo y | ufw enable
