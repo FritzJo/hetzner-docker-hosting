@@ -2,7 +2,7 @@
 
 # Check for root
 if [ "$EUID" -ne 0 ]
-  then echo "Please run this backup script as root"
+  then echo "Please run this script as root"
   exit
 fi
 
