@@ -8,3 +8,13 @@ variable "hcloud_location" {
 variable "hcloud_server_type" {
   default = "cx21"
 }
+
+variable "hcloud_server_name" {
+  default = "hosting-vps"
+}
+
+variable "floating_ip" {
+  default = true
+  type = bool
+}
+
