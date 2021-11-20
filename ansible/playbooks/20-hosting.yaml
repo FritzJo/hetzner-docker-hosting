@@ -9,6 +9,7 @@
     copy:
       src: ../services/
       dest: /hosting/instances/
+    when: skip_base_service|bool == false
 
   - name: Initializing containers
     become: yes
