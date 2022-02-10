@@ -9,4 +9,13 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "./data:/data"
+    environment:
+      LETSENCRYPT_HOST: docker.example.com
+      VIRTUAL_HOST: docker.example.com
+      VIRTUAL_PORT: 9000
+    networks:
+    - proxy
 
+networks:
+  proxy:
+    external: true
