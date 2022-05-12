@@ -1,0 +1,51 @@
+---
+# tasks file for security
+- name: Install security packages
+  become: yes
+  apt:
+    name: "{{ packagesdep }}"
+    force_apt_get: yes
+    state: latest
+    update_cache: yes
+  vars:
+    packagesdep:
+    - apt-transport-https
+    - debsums
+    - apt-show-versions
+    - libpam-passwdqc
+    - ntp
+    - ufw
+
+- name: Copy limits.conf
+  copy:
+    src: templates/limits.conf
+    dest: /etc/security/limits.conf
+
+- name: Update sshd config
+  copy:
+    src: templates/sshd_config
+    dest: /etc/ssh/sshd_config
+
+- name: Disable not required kernel modules
+  copy:
+    src: templates/security-blacklist.conf
+    dest: /etc/modprobe.d/blacklist.conf
+  
+- name: Copy firewall script
+  copy:
+    src: templates/firewall.sh
+    dest: /hosting/scripts/firewall.sh
+    mode: 0775
+
+- name: Copy firewall rules
+  copy:
+    src: templates/ufw-rules.conf
+    dest: /hosting/secrets/ufw-rules.conf
+
+#  - name: Copy custom firewall rules
+#    copy:
+#      src: ../custom/ansible/security/custom-ufw.conf
+#      dest: /hosting/secrets/custom-ufw.conf
+
+- name: "Update firewall rules"
+  command: bash /hosting/scripts/firewall.sh
