@@ -56,6 +56,7 @@ Run the script in the root directory. If everything was configured correctly thi
 After that you can login via SSH with any key that is added to your Hetzner account
 
 ### Post-Deployment
+If you can access the Portainer management interface at ```http://<Your-Servers-IP>:9000``` the deployment was successful.
 How to manage your new server is documented [here](docs/maintenance.md)
 
 ### Automation
@@ -69,7 +70,7 @@ The hosting environment created by these scripts automaticly installs various au
 | Script | Description |
 |--|--|
 | Update | The VM will update itself and all containers in /hosting/instances on reboot. This is also used to start each service after a reboot. |
-| Backup | Automated backups to GCP Storage. For more information (like how to change the repo password check the official [documentation](https://restic.readthedocs.io/en/latest/070_encryption.html)|
+| Backup | Automated backups to GCP Storage. For more information (like how to change the repo password check the official [documentation](https://restic.readthedocs.io/en/latest/070_encryption.html))|
 | Reboot | The VM will restart every Sunday at 3:30AM. This will cause a short downtime. |
 
 ## Examples
@@ -82,9 +83,9 @@ Check the [example documentation](docs/example-configs.md) for detailed examples
 | Network name | Description |
 |--|--|
 |Root| /hosting|
-|Docker configurations| /hosting/instances|
-|Management and scripts| /hosting/scripts|
-| Secrets| /hosting/secrets|
+| Docker configurations | /hosting/instances |
+| Management and scripts | /hosting/scripts |
+| Secrets | /hosting/secrets |
 
 ## Container Networks
 | Network name | Description |
@@ -117,3 +118,6 @@ ln -s </path/to/new/repo </path/to/hetzner-docker-hosting/custom>
 # FAQ
 ## 1. I updated my scripts and now the ansible instance update fails
 ```"Could not find or access '../custom/secrets/gcp-secret.json'``` is an error that occurs, because the location of the secret file got moved to the custom directory. Just copy (or move) your ```secrets``` folder into your existing ```custom``` directory.
+
+## 2. Are ARM VMs also supported?
+Yes! Simply change the ```terraform.tfvars``` in the ```custom``` directory to the desired ARM server type and adapt your Dockerfiles accordingly.
