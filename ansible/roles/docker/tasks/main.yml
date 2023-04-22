@@ -1,5 +1,3 @@
----
-# tasks file for docker
 - name: Update the apt package index
   become: yes
   apt:
@@ -7,6 +5,7 @@
     state: latest
     update_cache: yes
     force_apt_get: yes
+
 - name: Install packages for apt add repository over HTTPS
   become: yes
   apt:
@@ -23,6 +22,7 @@
     - software-properties-common
     - gnupg2
     - curl
+
 - name: Add Docker apt key.
   apt_key:
     url: https://download.docker.com/linux/ubuntu/gpg
@@ -30,11 +30,21 @@
     state: present
   become: yes
   become_method: sudo
-- name: add docker official repository for Debian Buster 
+
+- name: add docker official repository for Debian Buster (x64)
   apt_repository:
     repo: deb [arch=amd64] https://download.docker.com/linux/debian buster stable
     state: present
+  when: ansible_architecture == "x86_64"
   become: yes
+
+- name: add docker official repository for Debian Buster (arm64)
+  apt_repository:
+    repo: deb [arch=arm64] https://download.docker.com/linux/debian buster stable
+    state: present
+  when: ansible_architecture == "aarch64"
+  become: yes
+
 - name: Index new repo into the cache
   become: yes
   apt:
@@ -42,11 +52,13 @@
     state: latest
     update_cache: yes
     force_apt_get: yes
+
 - name: actually install docker
   apt:
     name: "docker-ce"
     state: latest
   become: yes
+
 - name: install docker tools
   apt:
     name: "{{ packages_list }}"
