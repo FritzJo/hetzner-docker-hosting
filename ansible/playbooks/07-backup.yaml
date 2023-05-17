@@ -1,4 +1,7 @@
 - hosts: all 
+  vars_files:
+    - ../../custom/ansible-config.yml
+
   tasks:
   - name: Install backup software
     apt:
@@ -12,7 +15,7 @@
 
   - name: Copy backup credentials
     copy:
-      src: ../custom/secrets/gcp-secret.json
+      src: ../../custom/secrets/gcp-secret.json
       dest: /hosting/secrets/gcp-secret.json
       mode: 0775
 
