@@ -1,3 +1,5 @@
+---
+# tasks file for docker
 - name: Update the apt package index
   become: yes
   apt:
@@ -5,7 +7,6 @@
     state: latest
     update_cache: yes
     force_apt_get: yes
-
 - name: Install packages for apt add repository over HTTPS
   become: yes
   apt:
@@ -15,36 +16,21 @@
     update_cache: yes
   vars:
     packagesdep:
-    - git
-    - apt-transport-https
     - ca-certificates
-    - wget
-    - software-properties-common
-    - gnupg2
+    - gnupg
     - curl
-
 - name: Add Docker apt key.
   apt_key:
-    url: https://download.docker.com/linux/ubuntu/gpg
+    url: https://download.docker.com/linux/debian/gpg
     id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
     state: present
   become: yes
   become_method: sudo
-
-- name: add docker official repository for Debian Buster (x64)
+- name: add docker official repository for Debian Bookworm 
   apt_repository:
-    repo: deb [arch=amd64] https://download.docker.com/linux/debian buster stable
+    repo: deb [arch={{ [ansible_architecture] | map('extract', deb_architecture) | first }}] https://download.docker.com/linux/debian bookworm stable
     state: present
-  when: ansible_architecture == "x86_64"
   become: yes
-
-- name: add docker official repository for Debian Buster (arm64)
-  apt_repository:
-    repo: deb [arch=arm64] https://download.docker.com/linux/debian buster stable
-    state: present
-  when: ansible_architecture == "aarch64"
-  become: yes
-
 - name: Index new repo into the cache
   become: yes
   apt:
@@ -52,14 +38,12 @@
     state: latest
     update_cache: yes
     force_apt_get: yes
-
-- name: actually install docker
+- name: Actually install docker
   apt:
     name: "docker-ce"
     state: latest
   become: yes
-
-- name: install docker tools
+- name: Install docker tools
   apt:
     name: "{{ packages_list }}"
     state: latest
