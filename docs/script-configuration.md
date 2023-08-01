@@ -8,15 +8,18 @@ File location: [custom/terraform.tfvars](custom/terraform.tfvars)
 |--|--|--|
 |hcloud_location|nbg1|Datacenter location of the server. To see all options run ```hcloud location list``` |
 |hcloud_server_type|cx21|Hardware specs of the server. Default is 2 vCPUs, 4 GB RAM, 40 GB Storage. To see all options run ```hcloud server-type list``` |
+|hcloud_server_name|hosting-vps|Name of the Hetzner VM created via this script. |
+|hcloud_server_image|debian-12|OS image used during deployment. |
 
 #### Example
 ```
 hcloud_token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 hcloud_floating_ip = "hosting-fip"
-hcloud_ssh_keys = ["1230000"]
 
 private_key = "/.ssh/private-key"
 hcloud_server_type = "cx11"
+hcloud_server_name = "my-docker-vm"
+hcloud_server_image = "debian-12"
 ```
 
 ### ansible-config.yml

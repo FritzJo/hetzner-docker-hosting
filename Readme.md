@@ -42,7 +42,7 @@ In addition to the core scripts for deploying and managing Docker environments, 
 ### Pre-Deployment
 1. Prepare your Hetzner environment
     1. Create an SSH key and add it to your Hetzner project
-    2. Create an floating IP, if you don't want to use this, comment out the last 5 lines in [main.tf](terraform/main.tf)
+    2. ~~Create an floating IP, if you don't want to use this, comment out the last 5 lines in [main.tf](terraform/main.tf)~~
 2. Create terraform.tfvars in the [custom directory](custom/) (An example is shown [here](docs/script-configuration.md))
 3. Initialize Terraform and all plugins by running
 ```
