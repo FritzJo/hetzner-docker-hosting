@@ -2,7 +2,8 @@
   roles:
     - role: foundation
     - role: docker
-- import_playbook: playbooks/07-backup.yaml
+    - role: backup
+    
 - import_playbook: playbooks/20-hosting.yaml
 
 - import_playbook: ../custom/ansible/playbook-custom.yaml
