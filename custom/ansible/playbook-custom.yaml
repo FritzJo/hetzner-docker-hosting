@@ -1,3 +1,5 @@
 - hosts: all
   tasks:
-  - debug: msg=Empty custom playbook {{ inventory_hostname }}
+  - name: Empty Playbook
+    ansible.builtin.debug:
+      msg: Empty custom playbook {{ inventory_hostname }}
