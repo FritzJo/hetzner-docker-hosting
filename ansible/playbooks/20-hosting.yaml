@@ -1,6 +1,4 @@
 - hosts: all 
-  vars_files:
-    - ../../custom/ansible-config.yml
   tasks:
   - name: Create proxy docker network
     become: yes

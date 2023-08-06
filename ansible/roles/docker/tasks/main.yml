@@ -28,7 +28,7 @@
   become_method: sudo
 - name: add docker official repository for Debian Bookworm 
   apt_repository:
-    repo: deb [arch={{ [ansible_architecture] | map('extract', deb_architecture) | first }}] https://download.docker.com/linux/debian bookworm stable
+    repo: deb [arch=amd64] https://download.docker.com/linux/debian bookworm stable
     state: present
   become: yes
 - name: Index new repo into the cache

@@ -1,7 +1,7 @@
 ---
 # tasks file for backup
 - name: Include vars of ansible-config.yaml
-  ansible.builtin.include_vars: ../../../custom/ansible-config.yaml
+  ansible.builtin.include_vars: ../../../../custom/ansible-config.yml
 - name: Install backup software
   apt:
     name: "restic"
@@ -12,7 +12,7 @@
     dest: /hosting/scripts/backup.sh
 - name: Copy backup credentials
   copy:
-    src: ../../../custom/secrets/gcp-secret.json
+    src: ../../../../custom/secrets/gcp-secret.json
     dest: /hosting/secrets/gcp-secret.json
     mode: 0775
 - name: Enable auto-backups
