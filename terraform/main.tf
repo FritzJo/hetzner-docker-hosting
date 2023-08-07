@@ -45,4 +45,3 @@ resource "hcloud_floating_ip_assignment" "hosting-ip" {
   count = var.floating_ip ? 1 : 0
 }
 
-

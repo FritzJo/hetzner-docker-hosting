@@ -1,5 +1,7 @@
 ---
 # tasks file for foundation
+- name: Include vars of ansible-config.yaml
+  ansible.builtin.include_vars: ../../../../custom/ansible-config.yml
 - name: Copy motd file
   template:
      src: templates/motd.j2
@@ -55,3 +57,16 @@
     minute: "30"
     hour: "3"
     job: "/sbin/shutdown -r now"
+
+- name: Install sudo
+  apt:
+    name: "sudo"
+    state: latest
+
+- name: Add the user with a bash shell
+  ansible.builtin.user:
+    name: "{{ user_name }}"
+    password: "{{ user_password | password_hash('sha512') }}"
+    shell: /bin/bash
+    groups: sudo
+    append: yes

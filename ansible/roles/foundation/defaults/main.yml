@@ -1,3 +1,5 @@
 ---
 # defaults file for motd
 system_manager: admin@example.org
+user_name: hetzner-user
+user_password: pleasechangeme
