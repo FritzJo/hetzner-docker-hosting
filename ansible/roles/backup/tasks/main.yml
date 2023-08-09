@@ -1,0 +1,24 @@
+---
+# tasks file for backup
+- name: Include vars of ansible-config.yaml
+  ansible.builtin.include_vars: ../../../../custom/ansible-config.yml
+- name: Install backup software
+  apt:
+    name: "restic"
+    state: latest
+- name: Copy backup script configuration
+  template:
+    src: templates/backup.sh
+    dest: /hosting/scripts/backup.sh
+- name: Copy backup credentials
+  copy:
+    src: ../../../../custom/secrets/gcp-secret.json
+    dest: /hosting/secrets/gcp-secret.json
+    mode: 0775
+- name: Enable auto-backups
+  cron:
+    name: "Backup containers every day at (1:00 AM)"
+    weekday: "0"
+    minute: "0"
+    hour: "1"
+    job: "/hosting/scripts/backup.sh"

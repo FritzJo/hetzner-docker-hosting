@@ -1,3 +1,11 @@
+# Credentails for the Google Cloud backup
 GCP_Project_ID: ""
 GCP_Bucket_Name: ""
 GCP_Backup_Password: ""
+
+# Domain that is used to host services. Required for automated SSL certificate provisioning
+hosting_domain: "example.org"
+
+# Details of the newly created non-root user
+user_name: hetzner-user
+user_password: pleasechangeme

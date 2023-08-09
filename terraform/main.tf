@@ -17,7 +17,7 @@ data "hcloud_ssh_keys" "all_keys" {
 # Create a server
 resource "hcloud_server" "hosting-vps" {
   name = var.hcloud_server_name
-  image = "debian-11"
+  image = var.hcloud_server_image
   location = var.hcloud_location
   server_type = var.hcloud_server_type
   keep_disk = true
@@ -44,5 +44,4 @@ resource "hcloud_floating_ip_assignment" "hosting-ip" {
   server_id = hcloud_server.hosting-vps.id
   count = var.floating_ip ? 1 : 0
 }
-
 

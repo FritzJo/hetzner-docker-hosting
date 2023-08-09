@@ -13,8 +13,12 @@ variable "hcloud_server_name" {
   default = "hosting-vps"
 }
 
+variable "hcloud_server_image" {
+  default = "debian-12"
+}
+
 variable "floating_ip" {
-  default = true
+  default = false
   type = bool
 }
 
