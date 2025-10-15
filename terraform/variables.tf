@@ -14,7 +14,7 @@ variable "hcloud_server_name" {
 }
 
 variable "hcloud_server_image" {
-  default = "debian-12"
+  default = "debian-13"
 }
 
 variable "floating_ip" {
