@@ -16,6 +16,10 @@ validate() {
       echo "ERROR: hcloud_token is empty in custom/terraform.tfvars" >&2
       errors=1
     fi
+
+    if ! grep -qE '^ssh_source_ips[[:space:]]*=' custom/terraform.tfvars; then
+      echo "WARNING: ssh_source_ips not set in custom/terraform.tfvars. SSH port 22 will be open to 0.0.0.0/0." >&2
+    fi
   fi
 
   if [[ ! -f custom/ansible-config.yml ]]; then

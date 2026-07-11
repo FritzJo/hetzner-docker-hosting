@@ -40,3 +40,20 @@ variable "floating_ip" {
   default     = false
 }
 
+variable "ssh_source_ips" {
+  description = "IP ranges allowed to connect via SSH (e.g. [\"203.0.113.0/24\"]). Defaults to 0.0.0.0/0 if unset — a warning is shown during apply."
+  type        = list(string)
+  default     = null
+}
+
+variable "firewall_additional_rules" {
+  description = "Additional firewall rules to apply to the server"
+  type = list(object({
+    direction  = string
+    protocol   = string
+    port       = string
+    source_ips = list(string)
+  }))
+  default = []
+}
+

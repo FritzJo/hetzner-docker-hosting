@@ -7,7 +7,6 @@
       - apt-show-versions
       - libpam-passwdqc
       - systemd-timesyncd
-      - ufw
       - fail2ban
     force_apt_get: yes
     state: latest
@@ -28,20 +27,6 @@
   ansible.builtin.copy:
     src: templates/security-blacklist.conf
     dest: /etc/modprobe.d/disable-unused-protocols.conf
-
-- name: Copy firewall script
-  ansible.builtin.copy:
-    src: templates/firewall.sh
-    dest: /hosting/scripts/firewall.sh
-    mode: 0755
-
-- name: Copy firewall rules
-  ansible.builtin.copy:
-    src: templates/ufw-rules.conf
-    dest: /hosting/secrets/ufw-rules.conf
-
-- name: Apply firewall rules
-  ansible.builtin.command: bash /hosting/scripts/firewall.sh
 
 - name: Create fail2ban jail configuration
   ansible.builtin.template:

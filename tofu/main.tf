@@ -1,9 +1,48 @@
+data "hcloud_ssh_keys" "all_keys" {
+}
+
 data "hcloud_floating_ip" "floating-ip" {
   count = var.floating_ip ? 1 : 0
   name  = var.hcloud_floating_ip
 }
 
-data "hcloud_ssh_keys" "all_keys" {
+locals {
+  ssh_source_ips = var.ssh_source_ips != null ? var.ssh_source_ips : ["0.0.0.0/0", "::/0"]
+}
+
+resource "hcloud_firewall" "hosting-fw" {
+  name = "${var.hcloud_server_name}-firewall"
+
+  dynamic "rule" {
+    for_each = var.firewall_additional_rules
+    content {
+      direction  = rule.value.direction
+      protocol   = rule.value.protocol
+      port       = rule.value.port
+      source_ips = rule.value.source_ips
+    }
+  }
+
+  rule {
+    direction  = "in"
+    protocol   = "tcp"
+    port       = "22"
+    source_ips = local.ssh_source_ips
+  }
+
+  rule {
+    direction  = "in"
+    protocol   = "tcp"
+    port       = "80"
+    source_ips = ["0.0.0.0/0", "::/0"]
+  }
+
+  rule {
+    direction  = "in"
+    protocol   = "tcp"
+    port       = "443"
+    source_ips = ["0.0.0.0/0", "::/0"]
+  }
 }
 
 resource "hcloud_server" "hosting-vps" {
@@ -30,6 +69,11 @@ resource "hcloud_server" "hosting-vps" {
       ansible-playbook master.yaml
     EOT
   }
+}
+
+resource "hcloud_firewall_attachment" "hosting-fw-attachment" {
+  firewall_id = hcloud_firewall.hosting-fw.id
+  server_ids  = [hcloud_server.hosting-vps.id]
 }
 
 resource "hcloud_floating_ip_assignment" "hosting-ip" {
