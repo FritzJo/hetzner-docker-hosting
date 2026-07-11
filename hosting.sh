@@ -21,7 +21,7 @@ case "$COMMAND" in
   update)
     export ANSIBLE_HOST_KEY_CHECKING=False
     cd ansible
-    ansible-playbook master.yaml
+    ansible-playbook -i ../custom/hosting-instances.ini master.yaml
     ;;
   *)
     echo "Usage: $0 {setup|create|destroy|update}" >&2

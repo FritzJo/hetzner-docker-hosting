@@ -6,7 +6,7 @@
       - debsums
       - apt-show-versions
       - libpam-passwdqc
-      - ntp
+      - systemd-timesyncd
       - ufw
     force_apt_get: yes
     state: latest
@@ -26,7 +26,7 @@
 - name: Disable unnecessary kernel modules
   ansible.builtin.copy:
     src: templates/security-blacklist.conf
-    dest: /etc/modprobe.d/blacklist.conf
+    dest: /etc/modprobe.d/disable-unused-protocols.conf
 
 - name: Copy firewall script
   ansible.builtin.copy:

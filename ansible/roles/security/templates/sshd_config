@@ -30,7 +30,7 @@ LogLevel VERBOSE
 
 #LoginGraceTime 2m
 #PermitRootLogin (FORCED-COMMANDS-ONLY|NO|PROHIBIT-PASSWORD|WITHOUT-PASSWORD)
-PermitRootLogin yes
+PermitRootLogin prohibit-password
 #StrictModes yes
 MaxAuthTries 3
 MaxSessions 2
@@ -54,7 +54,7 @@ MaxSessions 2
 #IgnoreRhosts yes
 
 # To disable tunneled clear text passwords, change to no here!
-#PasswordAuthentication yes
+PasswordAuthentication no
 #PermitEmptyPasswords no
 
 # Change to yes to enable challenge-response passwords (beware issues with

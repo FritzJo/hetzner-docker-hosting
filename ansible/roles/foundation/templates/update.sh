@@ -3,6 +3,7 @@ set -euo pipefail
 
 DEPLOYMENT_ROOT="/hosting/instances"
 
+export DEBIAN_FRONTEND=noninteractive
 apt-get update
 apt-get upgrade -y
 apt-get autoremove -y

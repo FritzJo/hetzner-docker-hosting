@@ -1,7 +1,5 @@
-version: '2'
-
 services:
-  db:
+  web:
     image: nginx:latest
     networks:
       - proxy
@@ -11,7 +9,7 @@ services:
     environment:
       LETSENCRYPT_HOST: dev.example.com
       VIRTUAL_HOST: dev.example.com
-      VIRTUAL_PORT: 8000
+      VIRTUAL_PORT: 80
 
 networks:
   proxy:
