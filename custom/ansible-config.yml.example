@@ -1,11 +1,6 @@
-# Credentials for Google Cloud Storage backup (Restic)
-GCP_Project_ID: ""
-GCP_Bucket_Name: ""
-GCP_Backup_Password: ""
-
 # Domain used for hosting services. Required for automated SSL certificate provisioning
 hosting_domain: "example.org"
 
 # Details of the non-root user created on the server
+# NOTE: user_password has been moved to custom/secrets/vault.yml (gitignored).
 user_name: hetzner-user
-user_password: pleasechangeme

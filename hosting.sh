@@ -27,6 +27,11 @@ validate() {
     errors=1
   fi
 
+  if [[ ! -f custom/secrets/vault.yml ]]; then
+    echo "ERROR: custom/secrets/vault.yml not found. Copy custom/secrets/vault.yml.example and set a strong password." >&2
+    errors=1
+  fi
+
   if [[ ! -f custom/hosting-instances.ini ]] && [[ "$COMMAND" != "create" ]]; then
     echo "WARNING: custom/hosting-instances.ini not found. Run 'create' first." >&2
   fi
@@ -82,7 +87,7 @@ case "$COMMAND" in
     ;;
   update)
     validate
-    export ANSIBLE_HOST_KEY_CHECKING=False
+    export ANSIBLE_SSH_ARGS="-o StrictHostKeyChecking=accept-new"
     cd ansible
     ansible-playbook -i ../custom/hosting-instances.ini master.yaml
     ;;

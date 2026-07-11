@@ -2,6 +2,10 @@
 - name: Include vars of ansible-config.yaml
   ansible.builtin.include_vars: ../../../../custom/ansible-config.yml
 
+- name: Include secrets from Ansible Vault file (gitignored, optionally encrypted)
+  ansible.builtin.include_vars: ../../../../custom/secrets/vault.yml
+  ignore_errors: true
+
 - name: Copy MOTD file
   ansible.builtin.template:
     src: templates/motd.j2
@@ -70,6 +74,16 @@
   ansible.builtin.apt:
     name: sudo
     state: latest
+
+- name: Ensure user_password is defined and sufficiently strong
+  ansible.builtin.assert:
+    that:
+      - user_password is defined
+      - user_password != "pleasechangeme"
+      - user_password | length >= 12
+    fail_msg: >-
+      Set a strong 'user_password' (>= 12 chars, not 'pleasechangeme') in
+      custom/secrets/vault.yml (see custom/secrets/vault.yml.example).
 
 - name: Create non-root user
   ansible.builtin.user:

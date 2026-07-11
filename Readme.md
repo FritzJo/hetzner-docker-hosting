@@ -43,12 +43,12 @@ In addition to the core scripts for deploying and managing Docker environments, 
 1. Prepare your Hetzner environment
     1. Create an SSH key and add it to your Hetzner project
     2. ~~Create an floating IP, if you don't want to use this, comment out the last 5 lines in [main.tf](tofu/main.tf)~~
-2. Create terraform.tfvars in the [custom directory](custom/) directory. (An example is shown [here](docs/script-configuration.md))
+2. Create terraform.tfvars in the [custom directory](custom/) directory from the [example](custom/terraform.tfvars.example). **You must set `ssh_source_ips`** to the IP range(s) allowed to SSH in — the deployment fails otherwise.
 3. Initialize OpenTofu and all plugins by running
 ```
 ./hosting.sh setup
 ```
-4. Configure your VM details in the custom directory (ansible-config.yml in [custom/](custom/ansible-config.yml)) directory.
+4. Configure your VM details in the custom directory. Copy [custom/ansible-config.yml.example](custom/ansible-config.yml.example) → `custom/ansible-config.yml` and [custom/secrets/vault.yml.example](custom/secrets/vault.yml.example) → `custom/secrets/vault.yml`, then set a strong `user_password` (and `GCP_Backup_Password` if using backups). See [script configuration](docs/script-configuration.md).
 5. Find out how to configure your DNS records. This is dependend on your domain registrar and will be needed later
 
 ### Deployment
@@ -59,9 +59,10 @@ Run the script in the root directory. If everything was configured correctly thi
 After that you can login via SSH with any key that is added to your Hetzner account
 
 ### Post-Deployment
-If you can access the Portainer management interface at ```http://<Your-Servers-IP>:9000``` the deployment was successful.
-Alternatively, if you configured a domain in your ansible configuration file your Portainer interface is also accessible via 
-[https://docker.<Your-Domain.tld>](#). To make this work you need to setup the correct DNS configuration. In most cases it is enough to create a single wildcard record that directs all subdomains to your new Hetzner IP.
+If you configured a domain in your ansible configuration file, the Portainer management interface is accessible via 
+[https://docker.<Your-Domain.tld>](#) (served through the TLS nginx-proxy). To make this work you need to set up the correct DNS configuration — in most cases it is enough to create a single wildcard record that directs all subdomains to your new Hetzner IP.
+
+> Portainer is **no longer** published on the host's port `9000` and is not reachable over plain HTTP. It is only exposed through the authenticated, TLS-terminated nginx-proxy, and the container still mounts the Docker socket, so protect its admin password accordingly.
 
 How to manage your new server is documented [here](docs/maintenance.md)
 
@@ -72,7 +73,7 @@ The hosting environment created by these scripts automaticly installs various au
 #### Default Services
 | Service | Description | URL/Port|
 |--|--|--|
-| Portainer | Manage Docker containers and view logs. | :9000, or ```https://docker.<Your-Domain>```|
+| Portainer | Manage Docker containers and view logs. | ```https://docker.<Your-Domain>``` (TLS proxy only) |
 
 #### Default scripts
 | Script | Description |

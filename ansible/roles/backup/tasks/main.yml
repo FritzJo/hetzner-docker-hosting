@@ -2,6 +2,10 @@
 - name: Include vars of ansible-config.yaml
   ansible.builtin.include_vars: ../../../../custom/ansible-config.yml
 
+- name: Include secrets from Ansible Vault file (gitignored, optionally encrypted)
+  ansible.builtin.include_vars: ../../../../custom/secrets/vault.yml
+  ignore_errors: true
+
 - name: Install restic
   ansible.builtin.apt:
     name: restic
@@ -11,7 +15,9 @@
   ansible.builtin.template:
     src: templates/backup.sh
     dest: /hosting/scripts/backup.sh
-    mode: 0755
+    mode: "0700"
+    owner: root
+    group: root
 
 - name: Copy backup credentials
   ansible.builtin.copy:
@@ -22,7 +28,6 @@
 - name: Enable daily backups at 1:00 AM
   ansible.builtin.cron:
     name: Backup containers
-    weekday: "0"
     minute: "0"
     hour: "1"
     job: "/hosting/scripts/backup.sh"

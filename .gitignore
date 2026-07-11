@@ -7,3 +7,13 @@ tofu/.terraform/
 instances/*
 !instances/management
 !instances/ingress-proxy
+
+# === Local secrets and config — NEVER commit real credentials ===
+# These files hold live Hetzner tokens, GCP keys, and passwords. They are
+# gitignored; copy the *.example templates to create them locally.
+custom/terraform.tfvars
+custom/ansible-config.yml
+
+# Ignore everything inside custom/secrets/ except the committed *.example files
+custom/secrets/*
+!custom/secrets/*.example
