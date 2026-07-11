@@ -1,17 +1,43 @@
 services:
+  # Minimal-privilege gateway to the Docker API. Internet-facing containers
+  # (nginx-proxy, acme-companion) talk to THIS instead of the raw
+  # /var/run/docker.sock, limiting the blast radius of a container compromise.
+  docker-socket-proxy:
+    image: linuxserver/docker-socket-proxy:latest
+    container_name: docker-socket-proxy
+    environment:
+      CONTAINERS: 1
+      NETWORKS: 1
+      IMAGES: 1
+      INFO: 1
+      # acme-companion needs to create short-lived challenge containers
+      POST: 1
+      # everything else (AUTH, EXEC, SECRETS, BUILD, SWARM, SYSTEM, ...) stays 0
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    restart: unless-stopped
+    networks:
+      - proxy
+
   nginx-proxy:
     image: nginxproxy/nginx-proxy
     container_name: nginx-proxy
     ports:
       - "80:80"
       - "443:443"
+    environment:
+      DOCKER_HOST: tcp://docker-socket-proxy:2375
     volumes:
       - conf:/etc/nginx/conf.d
       - vhost:/etc/nginx/vhost.d
       - html:/usr/share/nginx/html
       - dhparam:/etc/nginx/dhparam
       - certs:/etc/nginx/certs:ro
-      - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./my_proxy.conf:/etc/nginx/conf.d/filesize.conf:ro
     networks:
       - proxy
@@ -23,11 +49,12 @@ services:
       - nginx-proxy
     volumes:
       - certs:/etc/nginx/certs:rw
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      DOCKER_HOST: tcp://docker-socket-proxy:2375
+      LETSENCRYPT_EMAIL: "${LETSENCRYPT_EMAIL:-optional@mail.com}"
     networks:
       - proxy
-    environment:
-      - "LETSENCRYPT_EMAIL=optional@mail.com"
+    restart: unless-stopped
 
 volumes:
   conf:
