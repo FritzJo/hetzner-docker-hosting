@@ -52,23 +52,6 @@ resource "hcloud_server" "hosting-vps" {
   server_type = var.hcloud_server_type
   keep_disk   = true
   ssh_keys    = data.hcloud_ssh_keys.all_keys.ssh_keys[*].id
-
-  lifecycle {
-    prevent_destroy = true
-  }
-
-  provisioner "local-exec" {
-    command = <<-EOT
-      sleep 30
-      >../custom/hosting-instances.ini
-      echo "[hosting-vps]" | tee -a ../custom/hosting-instances.ini
-      echo "${self.ipv4_address}" | tee -a ../custom/hosting-instances.ini
-      echo "[hosting-vps:vars]" | tee -a ../custom/hosting-instances.ini
-      echo "floating_ip=${var.floating_ip ? data.hcloud_floating_ip.floating-ip[0].ip_address : ""}" | tee -a ../custom/hosting-instances.ini
-      cd ../ansible || exit 1
-      ansible-playbook master.yaml
-    EOT
-  }
 }
 
 resource "hcloud_firewall_attachment" "hosting-fw-attachment" {

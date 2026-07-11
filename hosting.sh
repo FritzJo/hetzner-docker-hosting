@@ -45,6 +45,11 @@ validate() {
     errors=1
   fi
 
+  if ! python3 -c "import passlib" 2>/dev/null; then
+    echo "ERROR: passlib not installed. Run: pip3 install passlib" >&2
+    errors=1
+  fi
+
   if [[ $errors -gt 0 ]]; then
     echo "Validation failed with $errors error(s)." >&2
     exit 1
@@ -65,6 +70,10 @@ case "$COMMAND" in
     validate
     cd tofu
     tofu apply -var-file="../custom/terraform.tfvars"
+    tofu output -raw ansible_inventory > ../custom/hosting-instances.ini
+    echo "Ansible inventory written to custom/hosting-instances.ini"
+    cd ../ansible
+    ansible-playbook master.yaml
     ;;
   destroy)
     cd tofu
@@ -77,8 +86,16 @@ case "$COMMAND" in
     cd ansible
     ansible-playbook -i ../custom/hosting-instances.ini master.yaml
     ;;
+  reconfigure)
+    validate
+    cd tofu
+    tofu output -raw ansible_inventory > ../custom/hosting-instances.ini
+    echo "Ansible inventory written to custom/hosting-instances.ini"
+    cd ../ansible
+    ansible-playbook master.yaml
+    ;;
   *)
-    echo "Usage: $0 {check|setup|create|destroy|update}" >&2
+    echo "Usage: $0 {check|setup|create|destroy|update|reconfigure}" >&2
     exit 1
     ;;
 esac

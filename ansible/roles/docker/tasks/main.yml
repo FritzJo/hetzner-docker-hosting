@@ -9,16 +9,23 @@
     state: latest
     update_cache: yes
 
-- name: Add Docker apt key
-  ansible.builtin.apt_key:
+- name: Create keyrings directory
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: "0755"
+
+- name: Download Docker GPG key
+  ansible.builtin.get_url:
     url: https://download.docker.com/linux/debian/gpg
-    id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
-    state: present
+    dest: /etc/apt/keyrings/docker.asc
+    mode: "0644"
 
 - name: Add Docker repository
   ansible.builtin.apt_repository:
-    repo: "deb [arch={{ deb_architecture[ansible_architecture] }}] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
+    repo: "deb [arch={{ deb_architecture[ansible_architecture] }} signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
     state: present
+    update_cache: yes
 
 - name: Install Docker CE
   ansible.builtin.apt:
