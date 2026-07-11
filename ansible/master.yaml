@@ -5,6 +5,7 @@
     - role: foundation
     - role: docker
     - role: backup
+    - role: security
 
 - name: Apply hosting services
   ansible.builtin.import_playbook: playbooks/20-hosting.yaml

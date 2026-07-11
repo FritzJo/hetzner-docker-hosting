@@ -3,3 +3,8 @@
   ansible.builtin.service:
     name: ssh
     state: restarted
+
+- name: restart fail2ban
+  ansible.builtin.service:
+    name: fail2ban
+    state: restarted

@@ -45,6 +45,27 @@
     hour: "3"
     job: "/sbin/shutdown -r now"
 
+- name: Install unattended-upgrades
+  ansible.builtin.apt:
+    name: unattended-upgrades
+    state: latest
+
+- name: Configure unattended-upgrades for security-only updates
+  ansible.builtin.template:
+    src: templates/50unattended-upgrades
+    dest: /etc/apt/apt.conf.d/50unattended-upgrades
+    mode: 0644
+
+- name: Enable periodic APT auto-upgrades
+  ansible.builtin.copy:
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
+    content: |
+      APT::Periodic::Update-Package-Lists "1";
+      APT::Periodic::Download-Upgradeable-Packages "1";
+      APT::Periodic::AutocleanInterval "7";
+      APT::Periodic::Unattended-Upgrade "1";
+    mode: 0644
+
 - name: Install sudo
   ansible.builtin.apt:
     name: sudo

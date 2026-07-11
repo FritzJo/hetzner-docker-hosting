@@ -1,0 +1,16 @@
+[DEFAULT]
+ignoreip = 127.0.0.1/8 ::1 {{ fail2ban_ignore_ips | join(' ') }}
+bantime = {{ fail2ban_bantime }}
+findtime = {{ fail2ban_findtime }}
+maxretry = {{ fail2ban_maxretry }}
+backend = systemd
+
+[sshd]
+enabled = true
+port = ssh
+logpath = %(sshd_log)s
+
+[nginx-proxy]
+enabled = true
+port = http,https
+logpath = /var/log/nginx/access.log

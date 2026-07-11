@@ -8,6 +8,7 @@
       - libpam-passwdqc
       - systemd-timesyncd
       - ufw
+      - fail2ban
     force_apt_get: yes
     state: latest
     update_cache: yes
@@ -41,3 +42,23 @@
 
 - name: Apply firewall rules
   ansible.builtin.command: bash /hosting/scripts/firewall.sh
+
+- name: Create fail2ban jail configuration
+  ansible.builtin.template:
+    src: templates/jail.local
+    dest: /etc/fail2ban/jail.local
+    mode: 0644
+  notify: restart fail2ban
+
+- name: Create nginx-proxy fail2ban filter
+  ansible.builtin.copy:
+    src: templates/nginx-proxy.conf
+    dest: /etc/fail2ban/filter.d/nginx-proxy.conf
+    mode: 0644
+  notify: restart fail2ban
+
+- name: Enable and start fail2ban
+  ansible.builtin.service:
+    name: fail2ban
+    enabled: yes
+    state: started
