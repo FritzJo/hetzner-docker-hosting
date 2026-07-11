@@ -1,15 +1,21 @@
-- hosts: all 
+---
+- name: Configure hosting services
+  hosts: all
   tasks:
-  - name: Create proxy docker network
-    become: yes
-    command: docker network create proxy
-    ignore_errors: yes
+    - name: Create proxy Docker network
+      ansible.builtin.command:
+        cmd: docker network create proxy
+        creates: /hosting/.docker-network-proxy
 
-  - name: Copy service files
-    copy:
-      src: ../services/
-      dest: /hosting/instances/
+    - name: Mark proxy network as created
+      ansible.builtin.file:
+        path: /hosting/.docker-network-proxy
+        state: touch
 
-  - name: Initializing containers
-    become: yes
-    command: /hosting/scripts/update.sh
+    - name: Copy service files
+      ansible.builtin.copy:
+        src: ../services/
+        dest: /hosting/instances/
+
+    - name: Initialize containers
+      ansible.builtin.command: /hosting/scripts/update.sh

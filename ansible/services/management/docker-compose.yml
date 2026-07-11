@@ -1,8 +1,6 @@
-version: '2'
-
 services:
   portainer:
-    image: portainer/portainer
+    image: portainer/portainer-ce
     container_name: 00_Management_Portainer
     ports:
       - "9000:9000"
@@ -14,7 +12,7 @@ services:
       VIRTUAL_HOST: docker.{{ hosting_domain }}
       VIRTUAL_PORT: 9000
     networks:
-    - proxy
+      - proxy
 
 networks:
   proxy:

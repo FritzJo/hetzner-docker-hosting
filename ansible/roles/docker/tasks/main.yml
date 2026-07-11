@@ -1,53 +1,33 @@
 ---
-# tasks file for docker
-- name: Update the apt package index
-  become: yes
-  apt:
-    name: "*"
-    state: latest
-    update_cache: yes
-    force_apt_get: yes
-- name: Install packages for apt add repository over HTTPS
-  become: yes
-  apt:
-    name: "{{ packagesdep }}"
+- name: Install dependencies for apt over HTTPS
+  ansible.builtin.apt:
+    name:
+      - ca-certificates
+      - gnupg
+      - curl
     force_apt_get: yes
     state: latest
     update_cache: yes
-  vars:
-    packagesdep:
-    - ca-certificates
-    - gnupg
-    - curl
-- name: Add Docker apt key.
-  apt_key:
+
+- name: Add Docker apt key
+  ansible.builtin.apt_key:
     url: https://download.docker.com/linux/debian/gpg
     id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
     state: present
-  become: yes
-  become_method: sudo
-- name: add docker official repository for Debian Bookworm 
-  apt_repository:
-    repo: deb [arch=amd64] https://download.docker.com/linux/debian bookworm stable
+
+- name: Add Docker repository
+  ansible.builtin.apt_repository:
+    repo: "deb [arch={{ deb_architecture[ansible_architecture] }}] https://download.docker.com/linux/debian bookworm stable"
     state: present
-  become: yes
-- name: Index new repo into the cache
-  become: yes
-  apt:
-    name: "*"
+
+- name: Install Docker CE
+  ansible.builtin.apt:
+    name: docker-ce
     state: latest
     update_cache: yes
     force_apt_get: yes
-- name: Actually install docker
-  apt:
-    name: "docker-ce"
+
+- name: Install Docker Compose plugin
+  ansible.builtin.apt:
+    name: docker-compose-plugin
     state: latest
-  become: yes
-- name: Install docker tools
-  apt:
-    name: "{{ packages_list }}"
-    state: latest
-  become: yes
-  vars:
-    packages_list:
-    - docker-compose

@@ -1,8 +1,6 @@
-version: '2'
-
 services:
   nginx-proxy:
-    image: jwilder/nginx-proxy 
+    image: jwilder/nginx-proxy
     container_name: nginx-proxy
     ports:
       - "80:80"
@@ -14,12 +12,12 @@ services:
       - dhparam:/etc/nginx/dhparam
       - certs:/etc/nginx/certs:ro
       - /var/run/docker.sock:/tmp/docker.sock:ro
-      - ./my_proxy.conf:/etc/nginx/conf.d/filesze.conf:ro
+      - ./my_proxy.conf:/etc/nginx/conf.d/filesize.conf:ro
     networks:
       - proxy
 
   letsencrypt:
-    image: jrcs/letsencrypt-nginx-proxy-companion
+    image: nginxproxy/acme-companion
     container_name: nginx-proxy-le
     volumes_from:
       - nginx-proxy

@@ -1,69 +1,56 @@
 ---
-# tasks file for foundation
 - name: Include vars of ansible-config.yaml
   ansible.builtin.include_vars: ../../../../custom/ansible-config.yml
-- name: Copy motd file
-  template:
-     src: templates/motd.j2
-     dest: /etc/motd
-     owner: root
-     group: root
-     mode: 0444
+
+- name: Copy MOTD file
+  ansible.builtin.template:
+    src: templates/motd.j2
+    dest: /etc/motd
+    owner: root
+    group: root
+    mode: 0444
 
 - name: Upgrade all apt packages
-  become: yes
-  apt: upgrade=dist force_apt_get=yes
+  ansible.builtin.apt:
+    upgrade: dist
+    force_apt_get: yes
 
-- name: Creating folder structure - scripts
-  become: yes
-  file:
-    path: /hosting/scripts
+- name: Create /hosting directory structure
+  ansible.builtin.file:
+    path: "/hosting/{{ item }}"
     state: directory
-    mode: 0775
-    recurse: yes
-
-- name: Creating folder structure - services
-  become: yes
-  file:
-    path: /hosting/instances
-    state: directory
-    mode: 0775
-    recurse: yes
-
-- name: Creating folder structure - secrets
-  become: yes
-  file:
-    path: /hosting/secrets
-    state: directory
-    mode: 0775
-    recurse: yes
+    mode: 0755
+  loop:
+    - scripts
+    - instances
+    - secrets
 
 - name: Copy update script
-  copy:
+  ansible.builtin.copy:
     src: templates/update.sh
     dest: /hosting/scripts/update.sh
-    mode: 0775
+    mode: 0755
 
-- name: Enable auto-updates and configuration changes on reboot
-  cron:
-    name: "Update containers at reboot"
+- name: Run update script on every reboot
+  ansible.builtin.cron:
+    name: Update containers at reboot
     special_time: reboot
     job: "/hosting/scripts/update.sh"
 
-- name: Enable auto-reboot every week
-  cron:
-    name: "Reboot every week (Sun. 3:30 AM)"
+- name: Reboot every Sunday at 3:30 AM
+  ansible.builtin.cron:
+    name: Weekly reboot
     weekday: "0"
     minute: "30"
     hour: "3"
     job: "/sbin/shutdown -r now"
 
 - name: Install sudo
-  apt:
-    name: "sudo"
+  ansible.builtin.apt:
+    name: sudo
     state: latest
 
-- name: Add the user with a bash shell
+- name: Create non-root user
   ansible.builtin.user:
     name: "{{ user_name }}"
     password: "{{ user_password | password_hash('sha512') }}"

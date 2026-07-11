@@ -1,41 +1,43 @@
 #!/bin/bash
-backup_command="restic -r gs:{{ GCP_Bucket_Name }}:/backups backup /hosting/instances"
-init_command="restic -r gs:{{ GCP_Bucket_Name }}:/backups init"
-restore_command="restic -r gs:{{ GCP_Bucket_Name }}:/backups restore latest --target /hosting/backup-restore"
-view_command="restic -r gs:{{ GCP_Bucket_Name }}:/backups snapshots"
+set -euo pipefail
 
-# Check for root
-if [ "$EUID" -ne 0 ]
-  then echo "Please run this backup script as root"
-  exit
+readonly BUCKET="{{ GCP_Bucket_Name }}"
+readonly BACKUP_TARGET="/hosting/instances"
+readonly RESTORE_TARGET="/hosting/backup-restore"
+
+backup_command="restic -r gs:${BUCKET}:/backups backup ${BACKUP_TARGET}"
+init_command="restic -r gs:${BUCKET}:/backups init"
+restore_command="restic -r gs:${BUCKET}:/backups restore latest --target ${RESTORE_TARGET}"
+view_command="restic -r gs:${BUCKET}:/backups snapshots"
+
+if [ "$EUID" -ne 0 ]; then
+  echo "Please run this backup script as root" >&2
+  exit 1
 fi
 
-# Configuration
 export GOOGLE_APPLICATION_CREDENTIALS="/hosting/secrets/gcp-secret.json"
 export GOOGLE_PROJECT_ID="{{ GCP_Project_ID }}"
 export RESTIC_PASSWORD="{{ GCP_Backup_Password }}"
 
-# Restore last backup
-if [ "$1" = "restore" ]; then
-  echo "Restoring latest backup to /hosting/backup-restore"
-  eval "$restore_command"
-  exit 0
-fi
-
-# View existing snapshots
-if [ "$1" = "view" ]; then
-  echo "Showing last snapshots"
-  eval "$view_command"
-  exit 0
-fi
-
-# Backup for instance data + databases
-echo "Backup instance data"
-
-if eval "$backup_command"; then
-  echo "Backup successful!"
-else
-  echo "Initializing Repository first"
-  eval "$init_command"
-  eval "$backup_command"
-fi
+case "${1:-}" in
+  restore)
+    echo "Restoring latest backup to ${RESTORE_TARGET}"
+    $restore_command
+    ;;
+  view)
+    echo "Showing existing snapshots"
+    $view_command
+    ;;
+  "")
+    echo "Backing up instance data"
+    if ! $backup_command; then
+      echo "Initializing repository"
+      $init_command
+      $backup_command
+    fi
+    ;;
+  *)
+    echo "Usage: $0 {restore|view}" >&2
+    exit 1
+    ;;
+esac
