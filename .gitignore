@@ -1,8 +1,8 @@
 custom/terraform.tfstate
 custom/terraform.tfstate.backup
-terraform/.terraform.lock.hcl
+tofu/.terraform.lock.hcl
 *.ini
-terraform/.terraform/
+tofu/.terraform/
 !instances/
 instances/*
 !instances/management
