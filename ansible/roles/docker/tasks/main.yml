@@ -17,7 +17,7 @@
 
 - name: Add Docker repository
   ansible.builtin.apt_repository:
-    repo: "deb [arch={{ deb_architecture[ansible_architecture] }}] https://download.docker.com/linux/debian bookworm stable"
+    repo: "deb [arch={{ deb_architecture[ansible_architecture] }}] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
     state: present
 
 - name: Install Docker CE
