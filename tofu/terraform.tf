@@ -1,12 +1,18 @@
 terraform {
+  required_version = ">= 1.5, < 2.0"
+
   required_providers {
     hcloud = {
-      source = "hetznercloud/hcloud"
+      source  = "hetznercloud/hcloud"
+      version = "~> 1.49"
     }
+  }
+
+  backend "local" {
+    path = "../custom/terraform.tfstate"
   }
 }
 
-# Configure the Hetzner Cloud Provider
 provider "hcloud" {
   token = var.hcloud_token
 }

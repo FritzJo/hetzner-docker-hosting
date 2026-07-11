@@ -1,3 +1,4 @@
 output "ephemeral-ip" {
-  value = "${hcloud_server.hosting-vps.ipv4_address}"
+  description = "IPv4 address of the created server"
+  value       = hcloud_server.hosting-vps.ipv4_address
 }

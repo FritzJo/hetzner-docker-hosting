@@ -1,20 +1,30 @@
 #!/bin/bash
-if [ "$1" = "setup" ]; then
-    echo "Initializing Terraform environment"
-    cd tofu/ || exit 1 
+set -euo pipefail
+
+COMMAND="${1:-}"
+
+case "$COMMAND" in
+  setup)
+    echo "Initializing OpenTofu environment"
+    cd tofu
     tofu init
-elif [ "$1" = "create" ]; then
-    cd tofu || exit 1
-    echo yes | tofu apply -var-file="../custom/terraform.tfvars"
-    cd .. || exit 1
-elif [ "$1" = "destroy" ]; then
-    cd tofu || exit 1
+    ;;
+  create)
+    cd tofu
+    tofu apply -var-file="../custom/terraform.tfvars"
+    ;;
+  destroy)
+    cd tofu
     tofu destroy -var-file="../custom/terraform.tfvars"
-    cd .. || exit 1
-    rm custom/hosting-instances.ini
-elif [ "$1" = "update" ]; then
+    rm -f ../custom/hosting-instances.ini
+    ;;
+  update)
     export ANSIBLE_HOST_KEY_CHECKING=False
-    cd ansible || exit 1
+    cd ansible
     ansible-playbook master.yaml
-    cd .. || exit 1
-fi
+    ;;
+  *)
+    echo "Usage: $0 {setup|create|destroy|update}" >&2
+    exit 1
+    ;;
+esac
